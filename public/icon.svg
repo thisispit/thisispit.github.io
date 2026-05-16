@@ -1,0 +1,6 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Squarcle Background (Theme Yellow) -->
+  <path d="M12 0C3.36 0 0 3.36 0 12V52C0 60.64 3.36 64 12 64H52C60.64 64 64 60.64 64 52V12C64 3.36 60.64 0 52 0H12Z" fill="#F5EDAA"/>
+  <!-- Letter P (Dark Charcoal) -->
+  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="40" font-weight="900" fill="#1E1E1E">P</text>
+</svg>
