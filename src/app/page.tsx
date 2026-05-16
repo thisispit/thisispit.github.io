@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Section from "@/components/Section";
 import FloatingBadge from "@/components/FloatingBadge";
 import ProjectCard from "@/components/ProjectCard";
+import Image from "next/image";
 import { ArrowDown, ArrowUpRight, Mail, Globe, User, FileText, Sparkles, Brain, Database, Code } from "lucide-react";
 
 export default function Home() {
@@ -127,8 +128,14 @@ export default function Home() {
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-soft border border-foreground/5 relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-background rounded-bl-[100%] z-0 transition-all group-hover:scale-110" />
               <div className="relative z-10">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-background rounded-2xl mb-6 flex items-center justify-center font-poppins font-bold text-2xl md:text-3xl">
-                  PS
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-background rounded-2xl mb-6 overflow-hidden border border-foreground/5">
+                  <Image 
+                    src="/media/img/profile2.jpg" 
+                    alt="Pitamber Singh" 
+                    width={80} 
+                    height={80} 
+                    className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                  />
                 </div>
                 <h3 className="text-xl md:text-2xl font-poppins font-black mb-2 uppercase tracking-tighter">Pitamber Singh</h3>
                 <p className="text-foreground/50 font-inter mb-6 uppercase tracking-widest text-[10px] md:text-xs font-bold">Data Science Engineer</p>
