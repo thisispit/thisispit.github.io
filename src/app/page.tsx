@@ -7,37 +7,74 @@ import Section from "@/components/Section";
 import FloatingBadge from "@/components/FloatingBadge";
 import ProjectCard from "@/components/ProjectCard";
 import Image from "next/image";
-import { ArrowDown, ArrowUpRight, Mail, Globe, User, FileText, Sparkles, Brain, Database, Code } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Mail, Globe, User, FileText, Sparkles, Brain, Database, Code, Terminal, Box } from "lucide-react";
 
 export default function Home() {
   const skills = [
     { name: "Python", icon: <Code size={14} /> },
+    { name: "Java", icon: <Code size={14} /> },
     { name: "SQL", icon: <Database size={14} /> },
-    { name: "Machine Learning", icon: <Brain size={14} /> },
+    { name: "Next.js", icon: <Globe size={14} /> },
+    { name: "ML", icon: <Brain size={14} /> },
     { name: "Data Visualization", icon: <Sparkles size={14} /> },
-    { name: "React", icon: <Code size={14} /> },
+    { name: "TypeScript", icon: <Code size={14} /> },
     { name: "FastAPI", icon: <Database size={14} /> },
     { name: "PyTorch", icon: <Brain size={14} /> },
+    { name: "Git", icon: <Globe size={14} /> },
+    { name: "Unix", icon: <Terminal size={14} /> },
+    { name: "OOPS", icon: <Box size={14} /> },
   ];
 
   const projects = [
     {
-      title: "Predictive Analytics Engine",
-      description: "A machine learning pipeline for forecasting market trends with 94% accuracy using ensemble methods.",
-      tags: ["Python", "Scikit-Learn", "Pandas"],
-      githubUrl: "#",
+      title: "NewsFlow",
+      description: "A personalized RSS news aggregation platform delivering real-time curated news through a fast and responsive reading experience.",
+      tags: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
+      githubUrl: "https://github.com/thisispit/NewsFlow",
+      liveUrl: "https://newsfloww.online",
+      previewAesthetic: (
+        <div className="w-full h-full relative">
+          <Image 
+            src="/media/img/newsflow_mockup.png" 
+            alt="NewsFlow Mockup" 
+            fill 
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+      )
     },
     {
-      title: "Neural Vision API",
-      description: "Real-time object detection and classification system built for high-throughput image streams.",
-      tags: ["PyTorch", "FastAPI", "Docker"],
-      githubUrl: "#",
+      title: "Fake News Detection",
+      description: "An intelligent machine learning system for detecting and classifying fake news articles using NLP techniques.",
+      tags: ["Python", "ML", "Scikit-Learn", "NLP"],
+      githubUrl: "https://github.com/thisispit/FakeNewsDetection",
+      previewAesthetic: (
+        <div className="w-full h-full relative">
+          <Image 
+            src="/media/img/Fake_news_mockup.png" 
+            alt="Fake News Detection Mockup" 
+            fill 
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+      )
     },
     {
-      title: "Data Insights Dashboard",
-      description: "Interactive visualization platform for multi-dimensional data analysis with real-time filtering.",
-      tags: ["React", "D3.js", "SQL"],
-      githubUrl: "#",
+      title: "Drizzzle",
+      description: "A modern application focused on scalable backend architecture and seamless frontend interactions.",
+      tags: ["React", "FastAPI", "Python", "SQL"],
+      githubUrl: "https://github.com/thisispit/Drizzzle",
+      liveUrl: "https://drizzzlerain.web.app/",
+      previewAesthetic: (
+        <div className="w-full h-full relative">
+          <Image 
+            src="/media/img/Drizzzle_mockups.png" 
+            alt="Drizzzle Mockup" 
+            fill 
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+      )
     },
   ];
 
@@ -143,15 +180,19 @@ export default function Home() {
                   <div className="flex items-center gap-4 p-4 bg-background/50 rounded-2xl border border-foreground/5 text-left">
                     <Database size={20} className="text-foreground/40 shrink-0" />
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/30 leading-none mb-1">Focus</p>
-                      <p className="text-xs md:text-sm font-medium">Machine Learning & Big Data</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/30 leading-none mb-2">Focus</p>
+                      <p className="text-xs md:text-sm font-medium leading-relaxed">
+                        ML • Intelligent Systems • Full-Stack Development • Data Engineering
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 p-4 bg-background/50 rounded-2xl border border-foreground/5 text-left">
                     <Code size={20} className="text-foreground/40 shrink-0" />
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/30 leading-none mb-1">Tech</p>
-                      <p className="text-xs md:text-sm font-medium">Python, React, SQL</p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/30 leading-none mb-2">Tech</p>
+                      <p className="text-xs md:text-sm font-medium leading-relaxed">
+                        Python • Java • Next.js • SQL • TypeScript • Supabase • LLMs
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -199,23 +240,15 @@ export default function Home() {
             whileTap={{ scale: 0.95 }}
             className="w-full md:w-auto"
           >
-            <Link href="https://github.com" target="_blank" className="flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-poppins font-bold uppercase tracking-widest text-xs md:text-sm shadow-soft">
+            <Link href="https://github.com/thisispit" target="_blank" className="flex items-center justify-center gap-2 px-8 py-4 bg-foreground text-background rounded-full font-poppins font-bold uppercase tracking-widest text-xs md:text-sm shadow-soft">
               View All Github <ArrowUpRight size={18} />
             </Link>
           </motion.div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.2 }}
-            >
-              <ProjectCard {...project} image="/placeholder.jpg" />
-            </motion.div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 lg:gap-16">
+          {projects.map((project) => (
+            <ProjectCard key={project.title} {...project} />
           ))}
         </div>
       </Section>
