@@ -125,30 +125,29 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="bg-white p-6 md:p-8 rounded-3xl shadow-soft border border-foreground/5 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-background rounded-bl-[100%] z-0 transition-all group-hover:scale-110" />
-              <div className="relative z-10">
-                <div className="w-16 h-16 md:w-20 md:h-20 bg-background rounded-2xl mb-6 overflow-hidden border border-foreground/5">
+            <div className="bg-white p-8 md:p-12 rounded-3xl shadow-soft border border-foreground/5 relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-48 h-48 bg-background rounded-bl-[100%] z-0 transition-all group-hover:scale-110" />
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="w-32 h-32 md:w-40 md:h-40 bg-background rounded-full mb-8 overflow-hidden border-4 border-white shadow-soft relative">
                   <Image 
-                    src="/media/img/profile2.jpg" 
+                    src="/media/img/profile1.jpg" 
                     alt="Pitamber Singh" 
-                    width={80} 
-                    height={80} 
-                    className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>
-                <h3 className="text-xl md:text-2xl font-poppins font-black mb-2 uppercase tracking-tighter">Pitamber Singh</h3>
-                <p className="text-foreground/50 font-inter mb-6 uppercase tracking-widest text-[10px] md:text-xs font-bold">Data Science Engineer</p>
+                <h3 className="text-2xl md:text-3xl font-poppins font-black mb-2 uppercase tracking-tighter">Pitamber Singh</h3>
+                <p className="text-foreground/50 font-inter mb-8 uppercase tracking-widest text-xs font-bold">Data Science Engineer</p>
                 
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4 p-4 bg-background/50 rounded-2xl border border-foreground/5">
+                <div className="space-y-4 w-full">
+                  <div className="flex items-center gap-4 p-4 bg-background/50 rounded-2xl border border-foreground/5 text-left">
                     <Database size={20} className="text-foreground/40 shrink-0" />
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/30 leading-none mb-1">Focus</p>
                       <p className="text-xs md:text-sm font-medium">Machine Learning & Big Data</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 p-4 bg-background/50 rounded-2xl border border-foreground/5">
+                  <div className="flex items-center gap-4 p-4 bg-background/50 rounded-2xl border border-foreground/5 text-left">
                     <Code size={20} className="text-foreground/40 shrink-0" />
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/30 leading-none mb-1">Tech</p>
