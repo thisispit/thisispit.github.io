@@ -232,14 +232,16 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-4 md:gap-8 mb-16 md:mb-20">
             {[
-              { icon: <Mail />, label: "Email", href: "mailto:hello@pitamber.com" },
-              { icon: <User />, label: "LinkedIn", href: "#" },
-              { icon: <Globe />, label: "Github", href: "#" },
-              { icon: <FileText />, label: "Resume", href: "#" },
+              { icon: <Mail />, label: "Email", href: "mailto:pitambersingh379@gmail.com" },
+              { icon: <User />, label: "LinkedIn", href: "https://www.linkedin.com/in/singhpitamber/" },
+              { icon: <Globe />, label: "Github", href: "https://github.com/thisispit" },
+              { icon: <FileText />, label: "Resume", href: "/media/resume.pdf" },
             ].map((link) => (
               <motion.a
                 key={link.label}
                 href={link.href}
+                target={link.label !== "Email" ? "_blank" : undefined}
+                rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
                 whileHover={{ y: -5 }}
                 className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
               >

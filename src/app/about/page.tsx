@@ -148,13 +148,18 @@ export default function AboutPage() {
       <Section className="bg-foreground text-background">
         <div className="text-center py-8 md:py-12">
           <h2 className="text-3xl md:text-6xl font-poppins font-black mb-8 uppercase tracking-tighter">Have a project in mind?</h2>
-          <a href="mailto:parthkaul.work@gmail.com" className="text-xl md:text-4xl font-playfair italic mb-12 block hover:opacity-70 transition-opacity break-words px-4">
-            parthkaul.work@gmail.com
+          <a href="mailto:pitambersingh379@gmail.com" className="text-xl md:text-4xl font-playfair italic mb-12 block hover:opacity-70 transition-opacity break-words px-4">
+            pitambersingh379@gmail.com
           </a>
           
-          <Link href="/#contact" className="inline-flex px-8 py-4 md:px-10 md:py-5 bg-background text-foreground rounded-full font-poppins font-bold uppercase tracking-widest text-xs md:text-sm shadow-soft hover:scale-105 transition-transform">
-            Get In Touch
-          </Link>
+          <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+            <Link href="/#contact" className="inline-flex px-8 py-4 md:px-10 md:py-5 bg-background text-foreground rounded-full font-poppins font-bold uppercase tracking-widest text-xs md:text-sm shadow-soft hover:scale-105 transition-transform">
+              Get In Touch
+            </Link>
+            <a href="/media/resume.pdf" target="_blank" rel="noopener noreferrer" className="inline-flex px-8 py-4 md:px-10 md:py-5 border border-white/20 text-background rounded-full font-poppins font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-white/10 transition-colors">
+              Download Resume
+            </a>
+          </div>
 
           <div className="pt-20 mt-20 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] md:text-xs font-bold uppercase tracking-widest text-background/40">
             <p>© 2026 Pitamber Singh. All Rights Reserved.</p>
