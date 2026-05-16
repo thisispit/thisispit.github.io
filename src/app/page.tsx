@@ -142,12 +142,12 @@ export default function Home() {
               Hello 👋 <br /> 
               I’m <span className="font-playfair italic font-normal normal-case text-4xl md:text-7xl">Pitamber</span>
             </h2>
-            <div className="space-y-6 text-base md:text-xl text-foreground/70 font-inter leading-relaxed">
+            <div className="text-lg md:text-2xl text-foreground/70 font-inter leading-tight max-w-xl tracking-tight">
               <p>
-                I am a Data Science Engineer passionate about turning complex data into actionable insights. My approach combines rigorous mathematical foundations with modern software engineering practices.
+                I&apos;m a Computer Science student specializing in <span className="text-foreground font-medium">Data Science</span>, focused on building intelligent systems that solve real-world problems.
               </p>
-              <p>
-                Currently focusing on deep learning architectures and scalable data pipelines, I strive to create solutions that are not only functional but also intuitive and beautifully designed.
+              <p className="mt-6 text-base md:text-lg text-foreground/50 leading-relaxed">
+                By bridging AI-powered applications with scalable backends, I create technically efficient products—specializing in OCR pipelines, local LLMs, and speech systems.
               </p>
             </div>
             <Link href="/about" className="inline-flex items-center gap-2 mt-8 text-xs md:text-sm font-bold uppercase tracking-widest text-foreground hover:gap-4 transition-all group">
@@ -174,28 +174,7 @@ export default function Home() {
                   />
                 </div>
                 <h3 className="text-2xl md:text-3xl font-poppins font-black mb-2 uppercase tracking-tighter">Pitamber Singh</h3>
-                <p className="text-foreground/50 font-inter mb-8 uppercase tracking-widest text-xs font-bold">Data Science Engineer</p>
-                
-                <div className="space-y-4 w-full">
-                  <div className="flex items-center gap-4 p-4 bg-background/50 rounded-2xl border border-foreground/5 text-left">
-                    <Database size={20} className="text-foreground/40 shrink-0" />
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/30 leading-none mb-2">Focus</p>
-                      <p className="text-xs md:text-sm font-medium leading-relaxed">
-                        ML • Intelligent Systems • Full-Stack Development • Data Engineering
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 p-4 bg-background/50 rounded-2xl border border-foreground/5 text-left">
-                    <Code size={20} className="text-foreground/40 shrink-0" />
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/30 leading-none mb-2">Tech</p>
-                      <p className="text-xs md:text-sm font-medium leading-relaxed">
-                        Python • Java • Next.js • SQL • TypeScript • Supabase • LLMs
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <p className="text-foreground/50 font-inter uppercase tracking-widest text-xs font-bold">Data Science Engineer</p>
               </div>
             </div>
           </motion.div>

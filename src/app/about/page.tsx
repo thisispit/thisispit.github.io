@@ -16,7 +16,9 @@ import {
   Music, 
   Users, 
   BookOpen, 
-  Sparkles
+  Sparkles,
+  Database,
+  Code
 } from "lucide-react";
 
 const fadeIn = {
@@ -64,45 +66,49 @@ export default function AboutPage() {
             <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" /> Back to Home
           </Link>
 
-          <div className="max-w-4xl">
-            <motion.h1 
+          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+            <motion.div
               initial={fadeIn.initial}
               whileInView={fadeIn.whileInView}
               viewport={fadeIn.viewport}
               transition={fadeIn.transition}
-              className="text-5xl md:text-8xl font-poppins font-black leading-none tracking-tighter uppercase mb-12"
             >
-              Building <br />
-              <span className="font-playfair italic font-normal normal-case text-4xl md:text-8xl">Intelligence.</span>
-            </motion.h1>
-            
-            <motion.div 
-              initial={fadeIn.initial}
-              whileInView={fadeIn.whileInView}
-              viewport={fadeIn.viewport}
-              transition={{ ...fadeIn.transition, delay: 0.2 }}
-              className="space-y-8 text-xl md:text-3xl font-inter leading-tight text-foreground/80 tracking-tight"
-            >
-              <p>
-                I am a Computer Science Engineering student specializing in <span className="text-foreground">Data Science</span>. I spend my time building intelligent systems, AI-powered applications, and modern web experiences.
-              </p>
-              <p className="text-lg md:text-2xl text-foreground/60 leading-relaxed font-normal">
-                My work spans across <span className="italic font-playfair text-foreground/80">OCR pipelines</span>, local LLMs, speech recognition systems, and scalable full-stack development. I believe in technology that is not just powerful, but <span className="italic font-playfair text-foreground/80">meaningful</span>.
-              </p>
+              <h1 className="text-5xl md:text-8xl font-poppins font-black leading-none tracking-tighter uppercase mb-8">
+                About <br />
+                <span className="font-playfair italic font-normal normal-case text-4xl md:text-8xl">Me</span>
+              </h1>
+              <div className="text-lg md:text-2xl text-foreground/70 font-inter leading-tight max-w-xl tracking-tight">
+                <p>
+                  I&apos;m a Computer Science student specializing in <span className="text-foreground font-medium">Data Science</span>, focused on building intelligent systems that solve real-world problems.
+                </p>
+                <p className="mt-6 text-base md:text-lg text-foreground/50 leading-relaxed">
+                  By bridging AI-powered applications with scalable backends, I create technically efficient products—specializing in OCR pipelines, local LLMs, and speech systems.
+                </p>
+              </div>
             </motion.div>
 
-            <motion.div 
-              initial={fadeIn.initial}
-              whileInView={fadeIn.whileInView}
-              viewport={fadeIn.viewport}
-              transition={{ ...fadeIn.transition, delay: 0.4 }}
-              className="flex flex-wrap gap-3 mt-16"
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative"
             >
-              {["Local LLMs", "OCR Pipelines", "Speech Systems", "Full-Stack", "Scalable Dev"].map((tag, i) => (
-                <FloatingBadge key={tag} delay={i * 0.1} className="bg-white">
-                  {tag}
-                </FloatingBadge>
-              ))}
+              <div className="bg-white p-8 md:p-12 rounded-3xl shadow-soft border border-foreground/5 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-48 h-48 bg-background rounded-bl-[100%] z-0 transition-all group-hover:scale-110" />
+                <div className="relative z-10 flex flex-col items-center text-center">
+                  <div className="w-32 h-32 md:w-40 md:h-40 bg-background rounded-full mb-8 overflow-hidden border-4 border-white shadow-soft relative">
+                    <Image 
+                      src="/media/img/profile4.png" 
+                      alt="Pitamber Singh" 
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-poppins font-black mb-2 uppercase tracking-tighter">Pitamber Singh</h3>
+                  <p className="text-foreground/50 font-inter uppercase tracking-widest text-xs font-bold">Data Science Engineer</p>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
@@ -120,7 +126,11 @@ export default function AboutPage() {
             {/* Journey Block 1 */}
             <div className="grid md:grid-cols-2 gap-16 md:gap-32 items-center">
               <div className="order-2 md:order-1">
-                <Polaroid rotation={-3} alt="Early coding days" caption="Where it all began" />
+                <Polaroid 
+                  rotation={-3} 
+                  alt="Early coding days" 
+                  caption="Where it all began" 
+                />
               </div>
               <motion.div 
                 initial={fadeIn.initial}
@@ -139,30 +149,6 @@ export default function AboutPage() {
                   My growth hasn&apos;t been linear. It&apos;s been a series of experiments, late-night debugging sessions, and the constant pursuit of making things just a little bit smarter.
                 </p>
               </motion.div>
-            </div>
-
-            {/* Journey Block 2 */}
-            <div className="grid md:grid-cols-2 gap-16 md:gap-32 items-center">
-              <motion.div 
-                initial={fadeIn.initial}
-                whileInView={fadeIn.whileInView}
-                viewport={fadeIn.viewport}
-                transition={fadeIn.transition}
-                className="space-y-6"
-              >
-                <h3 className="text-3xl md:text-5xl font-poppins font-black uppercase tracking-tighter leading-none">
-                  Practical <br /> <span className="font-playfair italic font-normal normal-case text-2xl md:text-5xl">AI Solutions.</span>
-                </h3>
-                <p className="text-lg text-foreground/60 font-inter leading-relaxed max-w-lg">
-                  Transitioning into Data Science allowed me to combine mathematical rigor with software engineering. From building OCR pipelines to experimenting with local LLMs, each project has been a lesson in scale and efficiency.
-                </p>
-                <p className="text-lg text-foreground/60 font-inter leading-relaxed max-w-lg">
-                  I thrive in the space where data meets the user, crafting experiences that are driven by intelligence but anchored in usability.
-                </p>
-              </motion.div>
-              <div>
-                <Polaroid rotation={4} alt="Working on AI models" caption="Late night iterations" delay={0.2} />
-              </div>
             </div>
           </div>
         </div>
