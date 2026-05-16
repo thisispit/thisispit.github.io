@@ -130,7 +130,7 @@ export default function Home() {
               <div className="relative z-10 flex flex-col items-center text-center">
                 <div className="w-32 h-32 md:w-40 md:h-40 bg-background rounded-full mb-8 overflow-hidden border-4 border-white shadow-soft relative">
                   <Image 
-                    src="/media/img/profile1.jpg" 
+                    src="/media/img/profile4.png" 
                     alt="Pitamber Singh" 
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
