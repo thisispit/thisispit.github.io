@@ -264,18 +264,17 @@ export default function Home() {
               { icon: <Globe />, label: "Github", href: "https://github.com/thisispit" },
               { icon: <FileText />, label: "Resume", href: "/media/resume.pdf" },
             ].map((link) => (
-              <MagneticWrapper key={link.label}>
-                <motion.a
-                  href={link.href}
-                  target={link.label !== "Email" ? "_blank" : undefined}
-                  rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
-                  whileHover={{ y: -5 }}
-                  className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-                >
-                  {link.icon}
-                  <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">{link.label}</span>
-                </motion.a>
-              </MagneticWrapper>
+              <motion.a
+                key={link.label}
+                href={link.href}
+                target={link.label !== "Email" ? "_blank" : undefined}
+                rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
+                whileHover={{ y: -5 }}
+                className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+              >
+                {link.icon}
+                <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">{link.label}</span>
+              </motion.a>
             ))}
           </div>
 
