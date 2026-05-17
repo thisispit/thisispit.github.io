@@ -20,8 +20,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Pitamber Singh | Data Science Engineer",
-  description: "Portfolio of Pitamber Singh, a Data Science Engineer specializing in soft-minimal editorial design and playful UI.",
+  title: "Pitamber Singh | AI & Software Engineering",
+  description: "Building intelligent systems through data science, AI, and modern software engineering.",
   icons: {
     icon: "/icon.svg",
   },

@@ -115,7 +115,7 @@ export default function Home() {
             </div>
             
             <p className="max-w-xl mx-auto text-base md:text-xl font-inter text-foreground/70 mt-12 md:mt-8 mb-12">
-              Engineering student specializing in data science, building intelligent systems with a focus on impact and elegance.
+              Building intelligent systems through data science, AI, and modern software engineering.
             </p>
 
             <motion.div
@@ -174,7 +174,7 @@ export default function Home() {
                   />
                 </div>
                 <h3 className="text-2xl md:text-3xl font-poppins font-black mb-2 uppercase tracking-tighter">Pitamber Singh</h3>
-                <p className="text-foreground/50 font-inter uppercase tracking-widest text-xs font-bold">Data Science Engineer</p>
+                <p className="text-foreground/50 font-inter uppercase tracking-widest text-xs font-bold">AI & Full-Stack Engineer</p>
               </div>
             </div>
           </motion.div>
@@ -236,10 +236,10 @@ export default function Home() {
       <Section id="contact" className="bg-foreground text-background">
         <div className="text-center py-8 md:py-12">
           <h2 className="text-5xl md:text-8xl font-poppins font-black mb-8 uppercase tracking-tighter leading-none">
-            Let's build <br /> <span className="font-playfair italic font-normal normal-case text-4xl md:text-8xl">something great</span>
+            Let&apos;s build <br /> <span className="font-playfair italic font-normal normal-case text-4xl md:text-8xl">something great</span>
           </h2>
           <p className="text-sm md:text-lg text-background/60 font-inter mb-12 md:mb-16 max-w-xl mx-auto">
-            I'm always open to new opportunities, collaborations, or just a friendly chat about data and design.
+            I&apos;m always open to new opportunities, collaborations, or just a friendly chat about data and design.
           </p>
 
           <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-4 md:gap-8 mb-16 md:mb-20">
@@ -262,6 +262,30 @@ export default function Home() {
               </motion.a>
             ))}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col items-center gap-8 mt-16"
+          >
+            <div className="relative group">
+              <div className="absolute -inset-2 bg-white/10 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative w-48 h-48 md:w-56 md:h-56 bg-white p-4 rounded-3xl shadow-2xl flex items-center justify-center cursor-pointer overflow-hidden border border-white/20">
+                <Link href="/media/resume.pdf" target="_blank" className="w-full h-full">
+                  <img 
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://thisispit.github.io/media/resume.pdf" 
+                    alt="Resume QR"
+                    className="w-full h-full grayscale-0 contrast-125"
+                  />
+                </Link>
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-3">
+              <span className="text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-background/80">Scan to View Resume</span>
+              <div className="h-0.5 w-12 bg-white/20 rounded-full" />
+            </div>
+          </motion.div>
 
           <div className="pt-12 md:pt-20 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] md:text-xs font-bold uppercase tracking-widest text-background/40">
             <p>© 2026 Pitamber Singh. All Rights Reserved.</p>

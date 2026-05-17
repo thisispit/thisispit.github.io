@@ -106,7 +106,7 @@ export default function AboutPage() {
                     />
                   </div>
                   <h3 className="text-2xl md:text-3xl font-poppins font-black mb-2 uppercase tracking-tighter">Pitamber Singh</h3>
-                  <p className="text-foreground/50 font-inter uppercase tracking-widest text-xs font-bold">Data Science Engineer</p>
+                  <p className="text-foreground/50 font-inter uppercase tracking-widest text-xs font-bold">AI & Full-Stack Engineer</p>
                 </div>
               </div>
             </motion.div>
