@@ -284,20 +284,18 @@ export default function Home() {
             viewport={{ once: true }}
             className="flex flex-col items-center gap-8 mt-16"
           >
-            <MagneticWrapper strength={0.3}>
-              <div className="relative group">
-                <div className="absolute -inset-2 bg-white/10 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                <div className="relative w-48 h-48 md:w-56 md:h-56 bg-white p-4 rounded-3xl shadow-2xl flex items-center justify-center cursor-pointer overflow-hidden border border-white/20">
-                  <Link href="/media/resume.pdf" target="_blank" className="w-full h-full">
-                    <img 
-                      src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://thisispit.github.io/media/resume.pdf" 
-                      alt="Resume QR"
-                      className="w-full h-full grayscale-0 contrast-125"
-                    />
-                  </Link>
-                </div>
+            <div className="relative group">
+              <div className="absolute -inset-2 bg-white/10 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative w-48 h-48 md:w-56 md:h-56 bg-white p-4 rounded-3xl shadow-2xl flex items-center justify-center cursor-pointer overflow-hidden border border-white/20">
+                <Link href="/media/resume.pdf" target="_blank" className="w-full h-full">
+                  <img 
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://thisispit.github.io/media/resume.pdf" 
+                    alt="Resume QR"
+                    className="w-full h-full grayscale-0 contrast-125"
+                  />
+                </Link>
               </div>
-            </MagneticWrapper>
+            </div>
             <div className="flex flex-col items-center gap-3">
               <span className="text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-background/80">Scan to View Resume</span>
               <div className="h-0.5 w-12 bg-white/20 rounded-full" />
