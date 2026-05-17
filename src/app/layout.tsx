@@ -38,10 +38,7 @@ export default function RootLayout({
       lang="en"
       className={`${poppins.variable} ${playfair.variable} ${inter.variable} antialiased`}
     >
-      <body className="bg-background text-foreground font-inter">
-        <CustomCursor />
-        {children}
-      </body>
+      <body className="bg-background text-foreground font-inter">{children}</body>
     </html>
   );
 }

@@ -6,7 +6,6 @@ import Navbar from "@/components/Navbar";
 import Section from "@/components/Section";
 import FloatingBadge from "@/components/FloatingBadge";
 import ProjectCard from "@/components/ProjectCard";
-import MagneticWrapper from "@/components/MagneticWrapper";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight, Mail, Globe, User, FileText, Sparkles, Brain, Database, Code, Terminal, Box } from "lucide-react";
 
