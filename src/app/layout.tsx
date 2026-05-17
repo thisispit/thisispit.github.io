@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Poppins, Playfair_Display, Inter } from "next/font/google";
-import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const poppins = Poppins({
