@@ -1,15 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Section from "@/components/Section";
 import FloatingBadge from "@/components/FloatingBadge";
 import ProjectCard from "@/components/ProjectCard";
+import MagneticWrapper from "@/components/MagneticWrapper";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight, Mail, Globe, User, FileText, Sparkles, Brain, Database, Code, Terminal, Box } from "lucide-react";
 
 export default function Home() {
+  const { scrollYProgress } = useScroll();
+  const letterSpacing = useTransform(scrollYProgress, [0, 0.2], ["-0.05em", "0.05em"]);
+
   const skills = [
     { name: "Python", icon: <Code size={14} /> },
     { name: "Java", icon: <Code size={14} /> },
@@ -100,7 +104,10 @@ export default function Home() {
               <FloatingBadge className="absolute -bottom-16 -right-8 md:-bottom-8 md:-right-16 rotate-[15deg] scale-75 md:scale-100" delay={0.5}>
                 <Sparkles size={16} className="mr-2" /> Data Scientist
               </FloatingBadge>
-              <h1 className="text-[18vw] md:text-[10vw] font-poppins font-black leading-[0.85] tracking-tighter uppercase text-foreground relative">
+              <motion.h1 
+                style={{ letterSpacing }}
+                className="text-[18vw] md:text-[10vw] font-poppins font-black leading-[0.85] tracking-tighter uppercase text-foreground relative"
+              >
                 Pitamber <br /> 
                 <span className="relative">
                   Singh
@@ -111,11 +118,20 @@ export default function Home() {
                     className="absolute -bottom-2 md:-bottom-4 left-0 h-2 md:h-4 bg-foreground/5 rounded-full z-[-1]"
                   />
                 </span>
-              </h1>
+              </motion.h1>
             </div>
             
-            <p className="max-w-xl mx-auto text-base md:text-xl font-inter text-foreground/70 mt-12 md:mt-8 mb-12">
-              Building intelligent systems through data science, AI, and modern software engineering.
+            <p className="max-w-xl mx-auto text-base md:text-xl font-inter text-foreground/70 mt-12 md:mt-8 mb-12 flex flex-wrap justify-center gap-x-2">
+              {"Building intelligent systems through data science, AI, and modern software engineering.".split(" ").map((word, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.8 + (i * 0.1) }}
+                >
+                  {word}
+                </motion.span>
+              ))}
             </p>
 
             <motion.div
@@ -249,17 +265,18 @@ export default function Home() {
               { icon: <Globe />, label: "Github", href: "https://github.com/thisispit" },
               { icon: <FileText />, label: "Resume", href: "/media/resume.pdf" },
             ].map((link) => (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                target={link.label !== "Email" ? "_blank" : undefined}
-                rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
-                whileHover={{ y: -5 }}
-                className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-              >
-                {link.icon}
-                <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">{link.label}</span>
-              </motion.a>
+              <MagneticWrapper key={link.label}>
+                <motion.a
+                  href={link.href}
+                  target={link.label !== "Email" ? "_blank" : undefined}
+                  rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
+                  whileHover={{ y: -5 }}
+                  className="flex flex-col items-center gap-3 p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+                >
+                  {link.icon}
+                  <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">{link.label}</span>
+                </motion.a>
+              </MagneticWrapper>
             ))}
           </div>
 
@@ -269,18 +286,20 @@ export default function Home() {
             viewport={{ once: true }}
             className="flex flex-col items-center gap-8 mt-16"
           >
-            <div className="relative group">
-              <div className="absolute -inset-2 bg-white/10 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative w-48 h-48 md:w-56 md:h-56 bg-white p-4 rounded-3xl shadow-2xl flex items-center justify-center cursor-pointer overflow-hidden border border-white/20">
-                <Link href="/media/resume.pdf" target="_blank" className="w-full h-full">
-                  <img 
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://thisispit.github.io/media/resume.pdf" 
-                    alt="Resume QR"
-                    className="w-full h-full grayscale-0 contrast-125"
-                  />
-                </Link>
+            <MagneticWrapper strength={0.3}>
+              <div className="relative group">
+                <div className="absolute -inset-2 bg-white/10 rounded-[2.5rem] blur-xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative w-48 h-48 md:w-56 md:h-56 bg-white p-4 rounded-3xl shadow-2xl flex items-center justify-center cursor-pointer overflow-hidden border border-white/20">
+                  <Link href="/media/resume.pdf" target="_blank" className="w-full h-full">
+                    <img 
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://thisispit.github.io/media/resume.pdf" 
+                      alt="Resume QR"
+                      className="w-full h-full grayscale-0 contrast-125"
+                    />
+                  </Link>
+                </div>
               </div>
-            </div>
+            </MagneticWrapper>
             <div className="flex flex-col items-center gap-3">
               <span className="text-xs md:text-sm font-bold uppercase tracking-[0.4em] text-background/80">Scan to View Resume</span>
               <div className="h-0.5 w-12 bg-white/20 rounded-full" />

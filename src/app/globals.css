@@ -18,6 +18,7 @@
 :root {
   --background: #F5EDAA;
   --foreground: #1E1E1E;
+  --foreground-rgb: 30, 30, 30;
 }
 
 body {

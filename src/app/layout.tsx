@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Playfair_Display, Inter } from "next/font/google";
+import CustomCursor from "@/components/CustomCursor";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -37,7 +38,10 @@ export default function RootLayout({
       lang="en"
       className={`${poppins.variable} ${playfair.variable} ${inter.variable} antialiased`}
     >
-      <body className="bg-background text-foreground font-inter">{children}</body>
+      <body className="bg-background text-foreground font-inter">
+        <CustomCursor />
+        {children}
+      </body>
     </html>
   );
 }
