@@ -1,4 +1,4 @@
-# Pitamber Singh | Data Science Engineer Portfolio
+# Pitamber Singh | Portfolio
 
 A modern, soft-minimal editorial portfolio built with Next.js, Tailwind CSS, and Framer Motion.
 
