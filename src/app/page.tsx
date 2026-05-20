@@ -7,6 +7,7 @@ import Section from "@/components/Section";
 import FloatingBadge from "@/components/FloatingBadge";
 import ProjectCard from "@/components/ProjectCard";
 import Image from "next/image";
+import RotatingTagline from "@/components/RotatingTagline";
 import { ArrowDown, ArrowUpRight, Mail, Globe, User, FileText, Sparkles, Brain, Database, Code, Terminal, Box } from "lucide-react";
 
 export default function Home() {
@@ -120,7 +121,7 @@ export default function Home() {
               </motion.h1>
             </div>
             
-            <p className="max-w-xl mx-auto text-base md:text-xl font-inter text-foreground/70 mt-12 md:mt-8 mb-12 flex flex-wrap justify-center gap-x-2">
+            <p className="max-w-xl mx-auto text-base md:text-xl font-inter text-foreground/70 mt-12 md:mt-8 mb-8 flex flex-wrap justify-center gap-x-2">
               {"Building intelligent systems through data science, AI, and modern software engineering.".split(" ").map((word, i) => (
                 <motion.span
                   key={i}
@@ -132,6 +133,10 @@ export default function Home() {
                 </motion.span>
               ))}
             </p>
+
+            <div className="mt-20 md:mt-24 mb-4">
+              <RotatingTagline />
+            </div>
 
             <motion.div
               animate={{ y: [0, 10, 0] }}
