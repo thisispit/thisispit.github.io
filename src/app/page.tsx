@@ -102,7 +102,7 @@ export default function Home() {
                 2026
               </FloatingBadge>
               <FloatingBadge className="absolute -bottom-16 -right-8 md:-bottom-8 md:-right-16 rotate-[15deg] scale-75 md:scale-100" delay={0.5}>
-                <Sparkles size={16} className="mr-2" /> Data Scientist
+                <Sparkles size={16} className="mr-2" /> Data Engineer
               </FloatingBadge>
               <motion.h1 
                 style={{ letterSpacing }}
@@ -194,7 +194,7 @@ export default function Home() {
                   />
                 </div>
                 <h3 className="text-2xl md:text-3xl font-poppins font-black mb-2 uppercase tracking-tighter">Pitamber Singh</h3>
-                <p className="text-foreground/50 font-inter uppercase tracking-widest text-xs font-bold">AI & Full-Stack Engineer</p>
+                <p className="text-foreground/50 font-inter uppercase tracking-widest text-xs font-bold">Data Engineer</p>
               </div>
             </div>
           </motion.div>
