@@ -253,7 +253,7 @@ export default function Home() {
       </Section>
 
       {/* Contact Section */}
-      <Section id="contact" className="bg-foreground text-background">
+      <Section id="contact" className="bg-foreground text-background !pb-8 md:!pb-12">
         <div className="text-center py-8 md:py-12">
           <h2 className="text-5xl md:text-8xl font-poppins font-black mb-8 uppercase tracking-tighter leading-none">
             Let&apos;s build <br /> <span className="font-playfair italic font-normal normal-case text-4xl md:text-8xl">something great</span>
