@@ -5,7 +5,7 @@ A modern, soft-minimal editorial portfolio built with Next.js, Tailwind CSS, and
 ## 🚀 Deployment Status
 
 This portfolio is configured for automatic deployment to **GitHub Pages** using GitHub Actions.
-
+- **URL:** [Pitamber.site](https://pitamber.site)
 - **URL:** [https://thisispit.github.io](https://thisispit.github.io)
 - **Status:** Check the **Actions** tab in the GitHub repository for the latest build and deployment status.
 
