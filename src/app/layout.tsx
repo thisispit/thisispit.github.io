@@ -25,6 +25,28 @@ export const metadata: Metadata = {
   icons: {
     icon: "/icon.svg",
   },
+  openGraph: {
+    title: "Pitamber Singh | Data Engineer",
+    description: "Building intelligent systems through data science, AI, and modern software engineering.",
+    url: "https://thisispit.github.io",
+    siteName: "Pitamber Singh",
+    type: "website",
+    locale: "en_US",
+    images: [
+      {
+        url: "https://thisispit.github.io/media/img/og_preview.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Pitamber Singh — Data Engineer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pitamber Singh | Data Engineer",
+    description: "Building intelligent systems through data science, AI, and modern software engineering.",
+    images: ["https://thisispit.github.io/media/img/og_preview.jpg"],
+  },
 };
 
 export default function RootLayout({

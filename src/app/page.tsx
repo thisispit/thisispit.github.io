@@ -31,6 +31,23 @@ export default function Home() {
 
   const projects = [
     {
+      title: "MindTiles",
+      description: "A premium memory card game designed for focus and flow. Sharpen your memory one match at a time with calm, elegant, and purposeful gameplay.",
+      tags: ["React", "TypeScript", "Vite", "Tailwind", "Framer Motion"],
+      githubUrl: "https://github.com/thisispit/MindTiles",
+      liveUrl: "https://mindtiles.vercel.app",
+      previewAesthetic: (
+        <div className="w-full h-full relative">
+          <Image 
+            src="/media/img/MindTiles_Mockups.png" 
+            alt="MindTiles Mockup" 
+            fill 
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+      )
+    },
+    {
       title: "NewsFlow",
       description: "A personalized RSS news aggregation platform delivering real-time curated news through a fast and responsive reading experience.",
       tags: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
@@ -74,6 +91,22 @@ export default function Home() {
           <Image 
             src="/media/img/Drizzzle_mockups.png" 
             alt="Drizzzle Mockup" 
+            fill 
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+      )
+    },
+    {
+      title: "Screeeny",
+      description: "A lightweight Chrome extension for capturing full-page and region screenshots in PNG, JPEG, or PDF format with Material 3 UI and dark mode support.",
+      tags: ["JavaScript", "CSS", "Chrome Extension"],
+      githubUrl: "https://github.com/thisispit/Screeeny",
+      previewAesthetic: (
+        <div className="w-full h-full relative">
+          <Image 
+            src="/media/img/Screeeny_Mockups.png" 
+            alt="Screeeny Mockup" 
             fill 
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
