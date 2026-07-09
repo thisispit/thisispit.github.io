@@ -127,6 +127,7 @@ export default function AboutPage() {
             <div className="grid md:grid-cols-2 gap-16 md:gap-32 items-center">
               <div className="order-2 md:order-1">
                 <Polaroid 
+                  src="/media/img/where_it_all_begansample1.jpg"
                   rotation={-3} 
                   alt="Early coding days" 
                   caption="Where it all began" 
@@ -222,7 +223,7 @@ export default function AboutPage() {
         </div>
 
         <div className="mt-20 md:mt-32 flex justify-center">
-          <Polaroid rotation={-2} alt="Chai moment" caption="Chai & Conversations" />
+          <Polaroid src="/media/img/chai&conversation_sample2.png" rotation={-2} alt="Chai moment" caption="Chai & Conversations" />
         </div>
       </Section>
 
