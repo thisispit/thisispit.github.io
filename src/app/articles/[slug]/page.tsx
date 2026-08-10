@@ -1,4 +1,4 @@
-import { getNote } from "@/lib/notes";
+import { getNote, getNoteSlugs } from "@/lib/articles";
 import { MDXRemote } from "next-mdx-remote/rsc";
 
 type Props = {
@@ -6,6 +6,10 @@ type Props = {
     slug: string;
   }>;
 };
+
+export function generateStaticParams() {
+  return getNoteSlugs().map((slug) => ({ slug }));
+}
 
 export default async function NotePage({ params }: Props) {
   const { slug } = await params;
