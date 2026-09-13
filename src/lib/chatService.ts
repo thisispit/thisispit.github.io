@@ -50,6 +50,34 @@ Here is how I solved it:
 It features real-time RSS feeds curation, user reading list persistence, and instantaneous edge caching so articles open without delay.`,
   },
   {
+    // Java & TEMS (Transport Enquiry Management System)
+    matches: (q) =>
+      q.includes("java") ||
+      q.includes("spring") ||
+      q.includes("tems") ||
+      q.includes("transport"),
+    response: `Yes, absolutely! **Java** is one of my primary core languages. I am certified as an **NCET+ SDE in Java** and actively build enterprise backends with **Java 21** and **Spring Boot**.
+
+My flagship Java project is **TEMS (Transport Enquiry Management System)**:
+- **Stack:** \`Java 21\`, \`Spring Boot\`, \`Spring Data JPA\`, \`SQLite\`, \`Maven\`, \`REST APIs\`, \`HTML/CSS/JS\`
+- **Architecture:** Layered controller-service-repository architecture with SQLite persistence, clean CRUD operations, input validation, and Spring Data JPA data access.
+- **Features:** Allows users to search transport routes, manage bookings, and query real-time schedule information through clean REST endpoints.
+
+I love building structured, type-safe enterprise systems in Java just as much as building AI and data science pipelines in Python!`,
+  },
+  {
+    // SpendSenseAI
+    matches: (q) =>
+      q.includes("spendsense") ||
+      q.includes("finance") ||
+      (q.includes("ocr") && (q.includes("ai") || q.includes("project"))),
+    response: `**SpendSenseAI** is an AI-powered personal finance tracker I engineered to eliminate manual expense tracking.
+
+- **Stack:** \`Python\`, \`OCR (PaddleOCR/Tesseract)\`, \`Ollama (Local LLMs)\`
+- **How it works:** Extracts, cleans, and classifies 95%+ of transactions from raw bank statement PDFs and images automatically.
+- **Impact:** Automates expense categorization across 10+ spending types, cutting manual data entry time by 80% and generating personalized monthly spending reports.`,
+  },
+  {
     // Top projects
     matches: (q) =>
       q === "what are your top projects?" ||
@@ -60,11 +88,12 @@ It features real-time RSS feeds curation, user reading list persistence, and ins
           q.includes("featured"))),
     response: `Here are the projects that best represent what I love building:
 
-1. **[NewsFlow](https://newsfloww.online)** — Real-time RSS news aggregation platform built with Next.js App Router, Supabase, and TypeScript.
-2. **[MindTiles](https://mindtiles.vercel.app)** — Focus-driven memory card game with silky 60fps spring animations using React, Vite, and Framer Motion.
-3. **[Fake News Detection](https://github.com/thisispit/FakeNewsDetection)** — NLP machine learning pipeline detecting deceptive news articles using Scikit-Learn.
-4. **[Drizzzle](https://drizzzlerain.web.app/)** — High-throughput asynchronous backend built with FastAPI, SQL databases, and React.
-5. **[Screeeny](https://github.com/thisispit/Screeeny)** — Lightweight Chrome extension for full-page and custom region screenshots (PNG, JPEG, PDF).
+1. **[NewsFlow](https://newsfloww.online)** — Real-time RSS news aggregation platform built with Next.js App Router, Supabase, and TypeScript (500+ daily articles, sub-200ms loads).
+2. **TEMS (Transport Enquiry Management System)** — Full-stack transport management platform built with **Java 21**, **Spring Boot**, and **Spring Data JPA**.
+3. **SpendSenseAI** — AI finance tracker using OCR and local LLMs (Ollama) to extract and categorize 95%+ of bank transactions automatically.
+4. **[MindTiles](https://mindtiles.vercel.app)** — Focus-driven memory card game with silky 60fps spring animations using React, Vite, and Framer Motion.
+5. **[Fake News Detection](https://github.com/thisispit/FakeNewsDetection)** — NLP machine learning pipeline detecting deceptive news articles using Scikit-Learn.
+6. **[Drizzzle](https://drizzzlerain.web.app/)** — High-throughput async backend with FastAPI and SQL.
 
 Curious about the technical architecture behind any of them?`,
   },
@@ -87,14 +116,15 @@ The key focus was designing a seamless state machine for flip timings and smooth
       (q.includes("skills") && !q.includes("contact")) ||
       q.includes("what tools do you use") ||
       q.includes("what is your tech"),
-    response: `My daily drivers are **Python** and **TypeScript**.
+    response: `My core programming languages are **Java**, **Python**, and **TypeScript**.
 
-Here's how I split my work:
-- **Data Science & ML:** PyTorch, Scikit-Learn, OCR pipelines (PaddleOCR/Tesseract), local LLMs, and speech systems (Whisper).
-- **Backend Architecture:** FastAPI (high-throughput async event loops), SQL databases, and Supabase.
-- **Frontend & Web:** Next.js (App Router), React, Tailwind CSS, and Framer Motion.
+Here is how my technical stack breaks down:
+- **Enterprise & Backend:** Java 21, Spring Boot, Spring Data JPA, JDBC, REST APIs, Maven, and FastAPI (Python async loops).
+- **Data Science & AI:** Pandas, NumPy, Scikit-learn, PyTorch, OCR pipelines (PaddleOCR/Tesseract), and Local LLMs (Ollama).
+- **Modern Frontend:** Next.js (App Router), React, Tailwind CSS, and Framer Motion.
+- **Databases & Tools:** PostgreSQL (Supabase), SQLite, MySQL, Linux, Git, IntelliJ IDEA, and VS Code.
 
-I specialize in bridging machine learning models with scalable backends and clean editorial interfaces.`,
+I hold an **NCET+ SDE (Java)** certification and am an **AWS Academy Cloud Architecting Graduate**.`,
   },
   {
     // Contact & Hire
@@ -112,7 +142,7 @@ I specialize in bridging machine learning models with scalable backends and clea
 - **GitHub:** [thisispit](${PORTFOLIO_DATA.contact.github})
 - **Resume:** [Download Resume (PDF)](${PORTFOLIO_DATA.contact.resumeUrl})
 
-I'm always open to discussing engineering roles, data science opportunities, or interesting collaborations!`,
+I'm always open to discussing software engineering roles, data science opportunities, or collaborative projects!`,
   },
   {
     // Resume
@@ -121,7 +151,7 @@ I'm always open to discussing engineering roles, data science opportunities, or 
 
 📄 [**Pitamber Singh Resume (PDF)**](${PORTFOLIO_DATA.contact.resumeUrl})
 
-It covers my data science background, full-stack projects, and technical proficiencies.`,
+It details my B.Tech Data Science background (CGPA: 8.20), Java & Python projects, and technical certifications.`,
   },
   {
     // Who is Pitamber / About
@@ -130,12 +160,14 @@ It covers my data science background, full-stack projects, and technical profici
       q.includes("who is pitamber") ||
       q.includes("about you") ||
       q.includes("tell me about yourself") ||
-      q.includes("background"),
-    response: `I'm **Pitamber Singh**, a Computer Science student and Data Engineer specializing in Data Science, Machine Learning, and scalable software systems.
+      q.includes("background") ||
+      q.includes("education") ||
+      q.includes("college"),
+    response: `I'm **Pitamber Singh** (Pitamber Kumar Singh), a B.Tech Data Science student at **Noida Institute of Engineering and Technology (NIET)**, Greater Noida (CGPA: 8.20 / 10.0).
 
-I build intelligent systems—specifically OCR pipelines, local LLMs, and speech systems—connected to fast asynchronous backends (FastAPI/Python) and clean frontends (Next.js/React).
+Originally from Bihar, I love building practical software that solves everyday problems—from high-performance RSS readers (**NewsFlow**) and enterprise transport management (**TEMS** in Java 21/Spring Boot) to AI financial document parsers (**SpendSenseAI**).
 
-My philosophy is **"Simplicity isn't the absence of depth—it's the removal of unnecessary complexity."** Outside the screen, I value deep conversations (*'Chai & Conversations'*), music, and continuous learning.
+My core philosophy is **"Simplicity isn't the absence of depth—it's the removal of unnecessary complexity."** Outside coding, I cherish deep conversations over a warm cup of chai (*'Chai & Conversations'*), music, and continuous learning.
 
 Feel free to ask about any of my **projects** or grab my **[Resume](/media/resume.pdf)**!`,
   },
