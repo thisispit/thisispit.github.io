@@ -101,43 +101,49 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
             <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
           ) : (
             <div>
-              {/* If streaming hasn't produced words yet, show smooth fluid wave dots */}
+              {/* If streaming hasn't produced words yet, show classic smooth typing wave */}
               {isStreaming && !message.content.trim() ? (
-                <div className="flex items-center gap-2 py-1 text-xs text-foreground/50 select-none">
-                  <span className="font-inter text-[11px] tracking-wide">Pitamber is thinking</span>
+                <div className="flex items-center gap-2 py-1.5 px-0.5 select-none">
+                  <span className="font-inter text-xs text-foreground/55 font-medium">Typing</span>
                   <div className="flex items-center gap-1">
                     {[0, 1, 2].map((i) => (
                       <motion.span
                         key={i}
-                        className="w-1.5 h-1.5 rounded-full bg-foreground/45 inline-block"
+                        className="w-1.5 h-1.5 rounded-full bg-foreground/60 inline-block"
                         animate={{
-                          y: [0, -3.5, 0],
-                          opacity: [0.35, 0.95, 0.35],
+                          y: [0, -4, 0],
+                          opacity: [0.35, 1, 0.35],
+                          scale: [0.9, 1.15, 0.9],
                         }}
                         transition={{
-                          duration: 1.1,
+                          duration: 0.9,
                           repeat: Infinity,
                           ease: "easeInOut",
-                          delay: i * 0.18,
+                          delay: i * 0.16,
                         }}
                       />
                     ))}
                   </div>
                 </div>
               ) : (
-                <div className="text-foreground/90 leading-relaxed text-sm">
+                <motion.div
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  className="text-foreground/90 leading-relaxed text-sm"
+                >
                   <div
                     className="[&>p]:my-2 [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&>ul]:my-2 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1 [&>ol]:my-2 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1 [&>li]:my-0.5 [&>code]:bg-black/5 [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded [&>code]:text-xs [&>code]:font-mono [&>pre]:bg-neutral-900 [&>pre]:text-neutral-100 [&>pre]:p-3 [&>pre]:rounded-xl [&>pre]:my-2 [&>pre]:overflow-x-auto [&>pre]:text-xs [&>pre]:font-mono"
                     dangerouslySetInnerHTML={{ __html: renderedHtml }}
                   />
                   {isStreaming && (
                     <motion.span
-                      className="inline-block w-1.5 h-3.5 ml-1 rounded-xs bg-foreground/70 align-middle"
-                      animate={{ opacity: [1, 0.2, 1] }}
-                      transition={{ duration: 0.75, repeat: Infinity, ease: "easeInOut" }}
+                      className="inline-block w-2 h-4 ml-1.5 rounded-xs bg-foreground align-middle"
+                      animate={{ opacity: [1, 0, 1] }}
+                      transition={{ duration: 0.65, repeat: Infinity, ease: "linear" }}
                     />
                   )}
-                </div>
+                </motion.div>
               )}
             </div>
           )}

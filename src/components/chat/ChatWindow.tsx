@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { X, RotateCcw, Sparkles } from "lucide-react";
 import ChatMessage from "./ChatMessage";
@@ -181,6 +181,41 @@ export default function ChatWindow({
 
         <div ref={messagesEndRef} />
       </div>
+
+      {/* 2.5 Active Typing Indicator Bar */}
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.18 }}
+            className="px-5 py-1.5 bg-white/70 backdrop-blur-sm border-t border-foreground/5 flex items-center gap-2 select-none overflow-hidden shrink-0"
+          >
+            <span className="font-inter text-[11px] font-medium text-foreground/60">
+              Pitamber is typing
+            </span>
+            <div className="flex items-center gap-1">
+              {[0, 1, 2].map((i) => (
+                <motion.span
+                  key={i}
+                  className="w-1.5 h-1.5 rounded-full bg-foreground/50"
+                  animate={{
+                    y: [0, -3, 0],
+                    opacity: [0.35, 1, 0.35],
+                  }}
+                  transition={{
+                    duration: 0.85,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: i * 0.15,
+                  }}
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* 3. Input Footer */}
       <ChatInput

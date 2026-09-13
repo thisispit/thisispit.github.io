@@ -291,7 +291,14 @@ async function streamFromGeminiDirect(
           const json = JSON.parse(jsonStr);
           const chunkText = json.candidates?.[0]?.content?.parts?.[0]?.text;
           if (chunkText) {
-            onChunk(chunkText);
+            const words = chunkText.split(/(\s+)/);
+            for (const word of words) {
+              if (signal?.aborted) return;
+              onChunk(word);
+              if (words.length > 1) {
+                await new Promise((r) => setTimeout(r, 12));
+              }
+            }
           }
         } catch {
           // Handle partial or malformed chunk gracefully
@@ -340,18 +347,24 @@ async function streamFromProxy(
 }
 
 /**
- * Streams predefined text quickly with natural typing pacing.
+ * Streams predefined text with a natural typing cadence and realistic initial thinking delay.
  */
 async function streamPredefinedText(
   text: string,
   onChunk: (chunk: string) => void,
   signal?: AbortSignal
 ): Promise<void> {
+  // 1. Brief typing pause to showcase the bot typing animation
+  await new Promise((r) => setTimeout(r, 320));
+  if (signal?.aborted) return;
+
+  // 2. Stream tokens with realistic typing cadence
   const words = text.split(/(\s+)/);
   for (let i = 0; i < words.length; i++) {
     if (signal?.aborted) break;
     onChunk(words[i]);
-    await new Promise((r) => setTimeout(r, 6));
+    const delay = words[i].includes("\n") ? 32 : words[i].match(/[.,?!:]/) ? 24 : 14;
+    await new Promise((r) => setTimeout(r, delay));
   }
 }
 
