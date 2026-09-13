@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
+import ChatBot from "@/components/chat/ChatBot";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -59,7 +60,10 @@ export default function RootLayout({
       lang="en"
       className={`${poppins.variable} ${playfair.variable} ${inter.variable} antialiased`}
     >
-      <body className="bg-background text-foreground font-inter">{children}</body>
+      <body className="bg-background text-foreground font-inter">
+        {children}
+        <ChatBot />
+      </body>
     </html>
   );
 }

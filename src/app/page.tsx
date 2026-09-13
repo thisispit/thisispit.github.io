@@ -297,7 +297,7 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:flex md:flex-wrap justify-center gap-4 md:gap-8 mb-16 md:mb-20">
             {[
-              { icon: <Mail />, label: "Email", href: "mailto:pitambersingh379@gmail.com" },
+              { icon: <Mail />, label: "Email", href: "mailto:pitambersiingh@gmail.com" },
               { icon: <User />, label: "LinkedIn", href: "https://www.linkedin.com/in/singhpitamber/" },
               { icon: <Globe />, label: "Github", href: "https://github.com/thisispit" },
               { icon: <FileText />, label: "Resume", href: "/media/resume.pdf" },

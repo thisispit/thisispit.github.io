@@ -4,7 +4,7 @@ export default function NotesPage() {
       <h1 className="text-5xl font-bold">Notes</h1>
 
       <p className="mt-4 text-neutral-500">
-        Thoughts, essays and things I'm learning.
+        Thoughts, essays and things I&apos;m learning.
       </p>
     </main>
   );

@@ -242,7 +242,7 @@ export default function AboutPage() {
           
           <div className="flex flex-wrap justify-center gap-6 md:gap-12 mb-20 md:mb-32">
             {[
-              { icon: <Mail />, label: "Email", href: "mailto:pitambersingh379@gmail.com" },
+              { icon: <Mail />, label: "Email", href: "mailto:pitambersiingh@gmail.com" },
               { icon: <User />, label: "LinkedIn", href: "https://www.linkedin.com/in/singhpitamber/" },
               { icon: <Globe />, label: "Github", href: "https://github.com/thisispit" },
               { icon: <FileText />, label: "Resume", href: "/media/resume.pdf" },
