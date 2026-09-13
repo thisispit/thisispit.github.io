@@ -132,7 +132,10 @@ export default function ChatWindow({
             <span>Hey there! 👋</span>
           </div>
           <p className="text-xs text-foreground/75 leading-relaxed font-inter">
-            Glad you dropped by. Feel free to ask about my projects like <strong>NewsFlow</strong> or <strong>MindTiles</strong>, my engineering background, or getting in touch:
+            Glad you dropped by. I&apos;m here to give you a little more insight into Pit—his work, engineering background, skills, and journey.
+          </p>
+          <p className="text-xs text-foreground/75 leading-relaxed font-inter mt-1.5">
+            Feel free to ask me anything:
           </p>
 
           <SuggestedPrompts
