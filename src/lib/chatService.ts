@@ -347,23 +347,24 @@ async function streamFromProxy(
 }
 
 /**
- * Streams predefined text with a natural typing cadence and realistic initial thinking delay.
+ * Streams predefined text with a natural typing cadence and realistic thinking delay.
+ * Simulates genuine AI generation so suggested queries feel like authentic chat interactions.
  */
 async function streamPredefinedText(
   text: string,
   onChunk: (chunk: string) => void,
   signal?: AbortSignal
 ): Promise<void> {
-  // 1. Brief typing pause to showcase the bot typing animation
-  await new Promise((r) => setTimeout(r, 320));
+  // 1. Realistic thinking delay so the user sees the bot formulating an answer
+  await new Promise((r) => setTimeout(r, 750));
   if (signal?.aborted) return;
 
-  // 2. Stream tokens with realistic typing cadence
+  // 2. Stream tokens with natural, smooth typing rhythm
   const words = text.split(/(\s+)/);
   for (let i = 0; i < words.length; i++) {
     if (signal?.aborted) break;
     onChunk(words[i]);
-    const delay = words[i].includes("\n") ? 32 : words[i].match(/[.,?!:]/) ? 24 : 14;
+    const delay = words[i].includes("\n") ? 36 : words[i].match(/[.,?!:]/) ? 28 : 18;
     await new Promise((r) => setTimeout(r, delay));
   }
 }

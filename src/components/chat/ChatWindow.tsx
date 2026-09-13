@@ -37,7 +37,11 @@ export default function ChatWindow({
   useEffect(() => {
     if (containerRef.current) {
       if (streamingMessageId) {
-        containerRef.current.scrollTop = containerRef.current.scrollHeight;
+        const el = containerRef.current;
+        const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 140;
+        if (isNearBottom) {
+          el.scrollTop = el.scrollHeight;
+        }
       } else {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
       }
@@ -182,33 +186,33 @@ export default function ChatWindow({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 2.5 Active Typing Indicator Bar */}
+      {/* 2.5 Active Typing Indicator Pill */}
       <AnimatePresence>
         {isLoading && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.18 }}
-            className="px-5 py-1.5 bg-white/70 backdrop-blur-sm border-t border-foreground/5 flex items-center gap-2 select-none overflow-hidden shrink-0"
+            transition={{ duration: 0.2 }}
+            className="px-5 py-2 bg-white/90 backdrop-blur-md border-t border-foreground/8 flex items-center gap-2 select-none overflow-hidden shrink-0 shadow-xs"
           >
-            <span className="font-inter text-[11px] font-medium text-foreground/60">
+            <span className="font-inter text-xs font-semibold text-foreground/75 tracking-tight">
               Pitamber is typing
             </span>
             <div className="flex items-center gap-1">
               {[0, 1, 2].map((i) => (
                 <motion.span
                   key={i}
-                  className="w-1.5 h-1.5 rounded-full bg-foreground/50"
+                  className="w-1.5 h-1.5 rounded-full bg-foreground/70"
                   animate={{
-                    y: [0, -3, 0],
+                    y: [0, -3.5, 0],
                     opacity: [0.35, 1, 0.35],
                   }}
                   transition={{
-                    duration: 0.85,
+                    duration: 0.8,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: i * 0.15,
+                    delay: i * 0.14,
                   }}
                 />
               ))}
