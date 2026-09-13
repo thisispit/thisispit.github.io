@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { X, RotateCcw, Sparkles } from "lucide-react";
 import ChatMessage from "./ChatMessage";
@@ -61,7 +61,7 @@ export default function ChatWindow({
       {/* 1. Header */}
       <div className="px-5 py-4 bg-white/90 backdrop-blur-md border-b border-foreground/10 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <div className="relative w-10 h-10 rounded-full bg-background overflow-hidden border border-foreground/10 shadow-xs">
+          <div className="relative w-9 h-9 rounded-full bg-background overflow-hidden border border-foreground/10 shadow-xs shrink-0">
             <Image
               src="/media/img/profile4.png"
               alt="Pitamber Singh"
@@ -69,36 +69,31 @@ export default function ChatWindow({
               className="object-cover"
             />
           </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <h3 className="text-sm font-poppins font-extrabold uppercase tracking-tight text-foreground">
-                Pitamber
-              </h3>
-              <span
-                className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-semibold border transition-all duration-300 ${
-                  isLoading
-                    ? "bg-foreground/5 text-foreground border-foreground/15"
-                    : "bg-emerald-50 text-emerald-700 border-emerald-200"
-                }`}
-              >
-                <span className="relative flex h-1.5 w-1.5">
-                  <span
-                    className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                      isLoading ? "bg-foreground/40" : "bg-emerald-400"
-                    }`}
-                  />
-                  <span
-                    className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
-                      isLoading ? "bg-foreground/75" : "bg-emerald-500"
-                    }`}
-                  />
-                </span>
-                {isLoading ? "Responding..." : "Online"}
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-poppins font-bold tracking-tight text-foreground">
+              Pitamber&apos;s AI
+            </h3>
+            <span
+              className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-semibold border transition-all duration-300 ${
+                isLoading
+                  ? "bg-foreground/5 text-foreground border-foreground/15"
+                  : "bg-emerald-50 text-emerald-700 border-emerald-200"
+              }`}
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span
+                  className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                    isLoading ? "bg-foreground/40" : "bg-emerald-400"
+                  }`}
+                />
+                <span
+                  className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
+                    isLoading ? "bg-foreground/75" : "bg-emerald-500"
+                  }`}
+                />
               </span>
-            </div>
-            <p className="text-[11px] font-inter text-foreground/50">
-              Data Engineer · Ask me anything
-            </p>
+              {isLoading ? "Responding..." : "Online"}
+            </span>
           </div>
         </div>
 
@@ -146,80 +141,19 @@ export default function ChatWindow({
           />
         </div>
 
-        {/* Message Thread */}
-        {messages.map((msg) => (
-          <ChatMessage
-            key={msg.id}
-            message={msg}
-            isStreaming={msg.id === streamingMessageId}
-          />
-        ))}
-
-        {/* Fallback Loading Placeholder (smooth undulating dots, no jerky bounce) */}
-        {isLoading && !streamingMessageId && (
-          <div className="flex items-center gap-2.5 text-xs text-foreground/60 p-2">
-            <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center border border-foreground/10 shadow-xs">
-              <Sparkles size={13} className="text-foreground" />
-            </div>
-            <div className="flex gap-1 items-center">
-              {[0, 1, 2].map((i) => (
-                <motion.span
-                  key={i}
-                  className="w-1.5 h-1.5 rounded-full bg-foreground/50"
-                  animate={{
-                    y: [0, -3.5, 0],
-                    opacity: [0.35, 0.95, 0.35],
-                  }}
-                  transition={{
-                    duration: 1.1,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: i * 0.18,
-                  }}
-                />
-              ))}
-            </div>
-            <span className="font-inter text-[11px] text-foreground/50">Thinking...</span>
-          </div>
-        )}
+        {/* Message Thread (renders user messages, messages with content, and active streaming message) */}
+        {messages
+          .filter((msg) => msg.role === "user" || msg.content.trim().length > 0 || msg.id === streamingMessageId)
+          .map((msg) => (
+            <ChatMessage
+              key={msg.id}
+              message={msg}
+              isStreaming={msg.id === streamingMessageId}
+            />
+          ))}
 
         <div ref={messagesEndRef} />
       </div>
-
-      {/* 2.5 Active Typing Indicator Pill */}
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="px-5 py-2 bg-white/90 backdrop-blur-md border-t border-foreground/8 flex items-center gap-2 select-none overflow-hidden shrink-0 shadow-xs"
-          >
-            <span className="font-inter text-xs font-semibold text-foreground/75 tracking-tight">
-              Pitamber is typing
-            </span>
-            <div className="flex items-center gap-1">
-              {[0, 1, 2].map((i) => (
-                <motion.span
-                  key={i}
-                  className="w-1.5 h-1.5 rounded-full bg-foreground/70"
-                  animate={{
-                    y: [0, -3.5, 0],
-                    opacity: [0.35, 1, 0.35],
-                  }}
-                  transition={{
-                    duration: 0.8,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: i * 0.14,
-                  }}
-                />
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* 3. Input Footer */}
       <ChatInput

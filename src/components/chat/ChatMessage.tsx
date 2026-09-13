@@ -73,14 +73,16 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
 
       {/* Message Bubble */}
       <div
-        className={`relative max-w-[90%] sm:max-w-[88%] rounded-2xl px-4 py-3 text-sm shadow-soft overflow-hidden ${
+        className={`relative text-sm shadow-soft overflow-hidden ${
           isUser
-            ? "bg-foreground text-background rounded-tr-xs font-inter leading-relaxed"
-            : "bg-white text-foreground rounded-tl-xs border border-foreground/5 font-inter"
+            ? "max-w-[90%] sm:max-w-[88%] bg-foreground text-background rounded-2xl rounded-tr-xs px-4 py-3 font-inter leading-relaxed"
+            : isStreaming && !message.content.trim()
+            ? "w-fit bg-white text-foreground rounded-2xl rounded-tl-xs px-4 py-2.5 border border-foreground/10 flex items-center"
+            : "max-w-[90%] sm:max-w-[88%] bg-white text-foreground rounded-2xl rounded-tl-xs px-4 py-3 font-inter border border-foreground/5"
         }`}
       >
-        {/* Subtle, smooth gliding accent shimmer at the bottom of the card while streaming */}
-        {!isUser && isStreaming && (
+        {/* Subtle, smooth gliding accent shimmer at the bottom of the card while streaming text */}
+        {!isUser && isStreaming && message.content.trim().length > 0 && (
           <div className="absolute inset-x-0 bottom-0 h-[2px] overflow-hidden rounded-b-2xl pointer-events-none">
             <motion.div
               className="h-full w-28 bg-gradient-to-r from-transparent via-foreground/25 to-transparent"
@@ -103,7 +105,7 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
             <div>
               {/* While waiting for words to start, show clean 3-dot typing wave */}
               {isStreaming && !message.content.trim() ? (
-                <div className="flex items-center gap-1.5 py-1.5 px-1 select-none">
+                <div className="flex items-center gap-1.5 py-1 px-0.5 select-none">
                   {[0, 1, 2].map((i) => (
                     <motion.span
                       key={i}
