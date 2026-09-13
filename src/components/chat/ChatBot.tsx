@@ -8,11 +8,31 @@ import { ChatMessage, streamChatResponse } from "@/lib/chatService";
 
 const STORAGE_KEY = "pitamber_portfolio_chat_v1";
 
+function isPageReload(): boolean {
+  if (typeof window === "undefined" || !window.performance) return false;
+  try {
+    const navEntries = window.performance.getEntriesByType("navigation");
+    if (navEntries.length > 0) {
+      return (navEntries[0] as PerformanceNavigationTiming).type === "reload";
+    }
+    // Fallback for older browser engines
+    return (window.performance as unknown as { navigation?: { type: number } }).navigation?.type === 1;
+  } catch {
+    return false;
+  }
+}
+
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     if (typeof window === "undefined") return [];
     try {
+      // If the page was refreshed (F5 / reload), reset the chat
+      if (isPageReload()) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        return [];
+      }
+
       const saved = sessionStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
