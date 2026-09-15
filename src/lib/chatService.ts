@@ -127,6 +127,57 @@ Here is how my technical stack breaks down:
 I hold an **NCET+ SDE (Java)** certification and am an **AWS Academy Cloud Architecting Graduate**.`,
   },
   {
+    // Sensitive Inquiries: Phone number / Mobile / WhatsApp / Direct Call
+    matches: (q) =>
+      q.includes("phone") ||
+      q.includes("mobile") ||
+      q.includes("whatsapp") ||
+      q.includes("telephone") ||
+      q.includes("cell") ||
+      q.includes("call you") ||
+      q.includes("call me") ||
+      /\bcall\b/.test(q) ||
+      (/\bnumber\b/.test(q) &&
+        (q.includes("contact") ||
+          q.includes("reach") ||
+          q.includes("your") ||
+          q.includes("give") ||
+          q.includes("send") ||
+          q.includes("share") ||
+          q.includes("personal"))),
+    response: `I prefer not to share my personal phone number publicly to protect my privacy and keep communication organized.
+
+If you'd like to get in touch, the best way to reach me is directly via email or LinkedIn:
+- **Email:** [${PORTFOLIO_DATA.contact.email}](mailto:${PORTFOLIO_DATA.contact.email})
+- **LinkedIn:** [Pitamber Singh on LinkedIn](${PORTFOLIO_DATA.contact.linkedin})
+- **GitHub:** [thisispit](${PORTFOLIO_DATA.contact.github})
+
+I check my inbox actively and respond promptly. If we need to connect over a voice or video call for an interview, hiring discussion, or collaboration, we can easily schedule a Google Meet or Zoom call once we connect over email!`,
+  },
+  {
+    // Sensitive Inquiries: Residential / Home Address
+    matches: (q) =>
+      (q.includes("address") && !q.includes("email")) ||
+      q.includes("home address") ||
+      q.includes("where do you live") ||
+      q.includes("where is your house"),
+    response: `I'm currently based in Greater Noida, Uttar Pradesh, where I'm pursuing my B.Tech in Data Science at NIET (originally from Bihar).
+
+For personal privacy, I don't share my residential address publicly. For any professional inquiries, collaborations, or correspondence, please reach out to me via email at **[${PORTFOLIO_DATA.contact.email}](mailto:${PORTFOLIO_DATA.contact.email})** or connect on **[LinkedIn](${PORTFOLIO_DATA.contact.linkedin})**!`,
+  },
+  {
+    // Sensitive Inquiries: Credentials / Secrets
+    matches: (q) =>
+      q.includes("password") ||
+      q.includes("api key") ||
+      q.includes("secret key") ||
+      q.includes("token") ||
+      q.includes("credential"),
+    response: `For security reasons, private credentials and sensitive personal information are strictly confidential and cannot be shared.
+
+If you have a legitimate inquiry or would like to collaborate, feel free to reach out via email at **[${PORTFOLIO_DATA.contact.email}](mailto:${PORTFOLIO_DATA.contact.email})** or connect on **[LinkedIn](${PORTFOLIO_DATA.contact.linkedin})**!`,
+  },
+  {
     // Contact & Hire
     matches: (q) =>
       q.includes("contact") ||
