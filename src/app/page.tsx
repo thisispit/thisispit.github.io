@@ -52,7 +52,7 @@ export default function Home() {
       description: "A personalized RSS news aggregation platform delivering real-time curated news through a fast and responsive reading experience.",
       tags: ["Next.js", "TypeScript", "Supabase", "Tailwind"],
       githubUrl: "https://github.com/thisispit/NewsFlow",
-      liveUrl: "https://newsfloww.online",
+      liveUrl: "https://newsflow.space",
       previewAesthetic: (
         <div className="w-full h-full relative">
           <Image 

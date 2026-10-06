@@ -27,7 +27,7 @@ const PREDEFINED_FAQS: PredefinedFAQ[] = [
           q.includes("difficult") ||
           q.includes("problem") ||
           q.includes("technical"))),
-    response: `The biggest technical hurdle in **[NewsFlow](https://newsfloww.online)** was definitely **real-time feed normalization and deduplication at high concurrency**.
+    response: `The biggest technical hurdle in **[NewsFlow](https://newsflow.space)** was definitely **real-time feed normalization and deduplication at high concurrency**.
 
 Every publisher serves wildly different RSS/Atom formats—some have missing timestamps, some embed raw tracking pixels, and syndication means multiple outlets push the exact same story with different URLs.
 
@@ -41,10 +41,10 @@ Here is how I solved it:
     matches: (q) =>
       q === "tell me about newsflow" ||
       (q.includes("newsflow") && !q.includes("hurdle") && !q.includes("challeng")),
-    response: `**[NewsFlow](https://newsfloww.online)** is a personalized RSS news aggregation platform I built for a fast, distraction-free reading experience.
+    response: `**[NewsFlow](https://newsflow.space)** is a personalized RSS news aggregation platform I built for a fast, distraction-free reading experience.
 
 - **Stack:** \`Next.js (App Router)\`, \`TypeScript\`, \`Supabase (PostgreSQL)\`, \`Tailwind CSS\`
-- **Live Demo:** [newsfloww.online](https://newsfloww.online)
+- **Live Demo:** [newsflow.space](https://newsflow.space)
 - **Source Code:** [GitHub Repository](https://github.com/thisispit/NewsFlow)
 
 It features real-time RSS feeds curation, user reading list persistence, and instantaneous edge caching so articles open without delay.`,
@@ -88,7 +88,7 @@ I love building structured, type-safe enterprise systems in Java just as much as
           q.includes("featured"))),
     response: `Here are the projects that best represent what I love building:
 
-1. **[NewsFlow](https://newsfloww.online)** — Real-time RSS news aggregation platform built with Next.js App Router, Supabase, and TypeScript (500+ daily articles, sub-200ms loads).
+1. **[NewsFlow](https://newsflow.space)** — Real-time RSS news aggregation platform built with Next.js App Router, Supabase, and TypeScript (500+ daily articles, sub-200ms loads).
 2. **TEMS (Transport Enquiry Management System)** — Full-stack transport management platform built with **Java 21**, **Spring Boot**, and **Spring Data JPA**.
 3. **SpendSenseAI** — AI finance tracker using OCR and local LLMs (Ollama) to extract and categorize 95%+ of bank transactions automatically.
 4. **[MindTiles](https://mindtiles.vercel.app)** — Focus-driven memory card game with silky 60fps spring animations using React, Vite, and Framer Motion.
@@ -518,7 +518,7 @@ export async function streamChatResponse(
     ? fallbackMatch.response
     : `I'm **Pitamber Singh**, a Computer Science student and Data Engineer focusing on AI pipelines, OCR systems, and scalable backends.
 
-Feel free to explore my **[Projects](#projects)** like **[NewsFlow](https://newsfloww.online)** and **[MindTiles](https://mindtiles.vercel.app)**, or download my **[Resume](/media/resume.pdf)**!`;
+Feel free to explore my **[Projects](#projects)** like **[NewsFlow](https://newsflow.space)** and **[MindTiles](https://mindtiles.vercel.app)**, or download my **[Resume](/media/resume.pdf)**!`;
 
   await streamPredefinedText(fallbackText, onChunk, signal);
 }

@@ -69,7 +69,7 @@ export const PORTFOLIO_DATA = {
       description: "A personalized RSS news aggregation platform ingesting 500+ articles daily from 20+ feeds with sub-200ms load times.",
       tags: ["Next.js", "TypeScript", "Supabase", "Tailwind CSS"],
       githubUrl: "https://github.com/thisispit/NewsFlow",
-      liveUrl: "https://newsfloww.online",
+      liveUrl: "https://newsflow.space",
       highlights: [
         "Architected full-stack news platform ingesting 500+ articles daily from 20+ RSS feeds",
         "Sub-200ms load times via optimized Supabase queries and Next.js edge caching",
@@ -197,7 +197,7 @@ CRITICAL INSTRUCTION ON JAVA:
 
 PROJECTS TO HIGHLIGHT:
 1. NewsFlow: A personalized RSS news aggregation platform ingesting 500+ articles daily from 20+ feeds with sub-200ms load times. Stack: Next.js, Supabase, TypeScript, Tailwind.
-   Live: https://newsfloww.online | Code: https://github.com/thisispit/NewsFlow
+   Live: https://newsflow.space | Code: https://github.com/thisispit/NewsFlow
    * Hardest Technical Hurdle: Real-time feed normalization and deduplication at high concurrency. Solved with asynchronous streaming parser pipeline, title-similarity hashing, and Next.js edge caching/ISR.
 
 2. Transport Enquiry Management System (TEMS): Full-stack transport management platform with route search, booking management, and live schedule queries.
