@@ -65,6 +65,35 @@ export default function Home() {
       )
     },
     {
+      title: "TEMS",
+      description: "An enterprise-grade Transport Enquiry Management System built with Java 21 and Spring Boot, streamlining transport operations, enquiry tracking, and fleet management at scale.",
+      tags: ["Java 21", "Spring Boot", "REST API", "SQL"],
+      githubUrl: "https://github.com/thisispit/Transport-Enquiry-Management-System",
+      liveUrl: "https://tems2.vercel.app/",
+      previewAesthetic: (
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-foreground/5 to-foreground/10">
+          <span className="text-foreground/20 font-poppins font-black text-4xl uppercase tracking-tighter">TEMS</span>
+        </div>
+      )
+    },
+    {
+      title: "JamFlow",
+      description: "A music streaming and discovery platform with seamless playback, curated playlists, and a clean listening experience built for audio enthusiasts.",
+      tags: ["React", "TypeScript", "Tailwind"],
+      githubUrl: "https://github.com/thisispit/JamFlow",
+      liveUrl: "https://jamflow.world",
+      previewAesthetic: (
+        <div className="w-full h-full relative">
+          <Image
+            src="/media/img/JamFlow Mockups.png"
+            alt="JamFlow Mockup"
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        </div>
+      )
+    },
+    {
       title: "Fake News Detection",
       description: "An intelligent machine learning system for detecting and classifying fake news articles using NLP techniques.",
       tags: ["Python", "ML", "Scikit-Learn", "NLP"],
