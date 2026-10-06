@@ -85,7 +85,7 @@ export default function Home() {
       previewAesthetic: (
         <div className="w-full h-full relative">
           <Image
-            src="/media/img/JamFlow Mockups.png"
+            src="/media/img/JamFlow_Mockups.png"
             alt="JamFlow Mockup"
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-105"
