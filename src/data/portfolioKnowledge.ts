@@ -1,4 +1,4 @@
-export interface ProjectInfo {
+﻿export interface ProjectInfo {
   title: string;
   description: string;
   tags: string[];
@@ -82,8 +82,10 @@ export const PORTFOLIO_DATA = {
       title: "Transport Enquiry Management System (TEMS)",
       description: "A full-stack transport management platform enabling users to search routes, manage bookings, and access transport info backed by Spring Boot REST APIs.",
       tags: ["Java 21", "Spring Boot", "Spring Data JPA", "SQLite", "Maven", "REST APIs"],
-      githubUrl: "https://github.com/thisispit",
+      githubUrl: "https://github.com/thisispit/Transport-Enquiry-Management-System",
+      liveUrl: "https://tems2.vercel.app/",
       highlights: [
+        "Enterprise-grade transport management with fleet tracking, enquiry management, and bookings",
         "Designed scalable backend using layered architecture with SQLite persistence",
         "Implemented clean CRUD operations, input validation, and Spring Data JPA data access",
         "Built responsive web interface interacting with Spring Boot REST endpoints"
@@ -114,6 +116,19 @@ export const PORTFOLIO_DATA = {
         "Calm, distraction-free minimalist editorial interface"
       ],
       architecturalDetails: "Built using React with Vite for instantaneous HMR, TypeScript for strict type-safety, Framer Motion for gesture-driven physics card flips, and Tailwind for soft minimalist aesthetics."
+    },
+    {
+      title: "JamFlow",
+      description: "A music streaming and discovery platform with seamless playback, curated playlists, and a clean listening experience built for audio enthusiasts.",
+      tags: ["React", "TypeScript", "Tailwind CSS"],
+      githubUrl: "https://github.com/thisispit/JamFlow",
+      liveUrl: "https://jamflow.world",
+      highlights: [
+        "Music streaming and discovery platform with a clean, minimalist UI",
+        "Seamless audio playback with curated playlists",
+        "Built with React and TypeScript for type-safe, smooth interactions"
+      ],
+      architecturalDetails: "Frontend-first architecture built with React and TypeScript, Tailwind for the minimalist aesthetic, focused on smooth audio streaming UX."
     },
     {
       title: "Fake News Detection",
@@ -200,8 +215,9 @@ PROJECTS TO HIGHLIGHT:
    Live: https://newsflow.space | Code: https://github.com/thisispit/NewsFlow
    * Hardest Technical Hurdle: Real-time feed normalization and deduplication at high concurrency. Solved with asynchronous streaming parser pipeline, title-similarity hashing, and Next.js edge caching/ISR.
 
-2. Transport Enquiry Management System (TEMS): Full-stack transport management platform with route search, booking management, and live schedule queries.
+2. Transport Enquiry Management System (TEMS): Enterprise-grade transport management platform with fleet tracking, enquiry management, route search, and booking.
    Stack: Java 21, Spring Boot, Spring Data JPA, SQLite, Maven, REST APIs.
+   Live: https://tems2.vercel.app/ | Code: https://github.com/thisispit/Transport-Enquiry-Management-System
    Highlights: Layered controller-service-repository architecture, input validation, and SQLite persistence.
 
 3. SpendSenseAI: AI-powered personal finance tracker that extracts, cleans, and categorizes 95%+ of bank statement transactions automatically across 10+ spending types.
@@ -212,13 +228,17 @@ PROJECTS TO HIGHLIGHT:
    Stack: React, TypeScript, Vite, Framer Motion, Tailwind.
    Live: https://mindtiles.vercel.app | Code: https://github.com/thisispit/MindTiles
 
-5. Fake News Detection: NLP machine learning pipeline classifying deceptive articles using TF-IDF and Scikit-Learn.
+5. JamFlow: Music streaming and discovery platform with seamless playback and curated playlists.
+   Stack: React, TypeScript, Tailwind CSS.
+   Live: https://jamflow.world | Code: https://github.com/thisispit/JamFlow
+
+6. Fake News Detection: NLP machine learning pipeline classifying deceptive articles using TF-IDF and Scikit-Learn.
    Code: https://github.com/thisispit/FakeNewsDetection
 
-6. Drizzzle: High-throughput async backend with FastAPI, SQL, and React.
+7. Drizzzle: High-throughput async backend with FastAPI, SQL, and React.
    Live: https://drizzzlerain.web.app/ | Code: https://github.com/thisispit/Drizzzle
 
-7. Screeeny: Chrome extension for full-page and custom region screenshots (PNG, JPEG, PDF) with Material 3 UI.
+8. Screeeny: Chrome extension for full-page and custom region screenshots (PNG, JPEG, PDF) with Material 3 UI.
    Code: https://github.com/thisispit/Screeeny
 
 EDUCATION & BACKGROUND:
@@ -255,7 +275,7 @@ export const SUGGESTED_QUESTIONS = [
   "What are your top projects?",
   "What was the most challenging technical hurdle in NewsFlow?",
   "What is your tech stack & AI background?",
-  "How was MindTiles built?",
+  "Tell me about JamFlow",
   "Can I see your resume?",
   "How can I get in touch or hire you?"
 ];

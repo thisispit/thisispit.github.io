@@ -1,4 +1,4 @@
-import { PORTFOLIO_DATA, SYSTEM_PROMPT } from "@/data/portfolioKnowledge";
+﻿import { PORTFOLIO_DATA, SYSTEM_PROMPT } from "@/data/portfolioKnowledge";
 
 export interface ChatMessage {
   id: string;
@@ -60,8 +60,9 @@ It features real-time RSS feeds curation, user reading list persistence, and ins
 
 My flagship Java project is **TEMS (Transport Enquiry Management System)**:
 - **Stack:** \`Java 21\`, \`Spring Boot\`, \`Spring Data JPA\`, \`SQLite\`, \`Maven\`, \`REST APIs\`, \`HTML/CSS/JS\`
+- **Live Demo:** [tems2.vercel.app](https://tems2.vercel.app/) | **Code:** [GitHub](https://github.com/thisispit/Transport-Enquiry-Management-System)
 - **Architecture:** Layered controller-service-repository architecture with SQLite persistence, clean CRUD operations, input validation, and Spring Data JPA data access.
-- **Features:** Allows users to search transport routes, manage bookings, and query real-time schedule information through clean REST endpoints.
+- **Features:** Enterprise-grade transport management—fleet tracking, enquiry management, route search, and booking through clean REST endpoints.
 
 I love building structured, type-safe enterprise systems in Java just as much as building AI and data science pipelines in Python!`,
   },
@@ -89,11 +90,12 @@ I love building structured, type-safe enterprise systems in Java just as much as
     response: `Here are the projects that best represent what I love building:
 
 1. **[NewsFlow](https://newsflow.space)** — Real-time RSS news aggregation platform built with Next.js App Router, Supabase, and TypeScript (500+ daily articles, sub-200ms loads).
-2. **TEMS (Transport Enquiry Management System)** — Full-stack transport management platform built with **Java 21**, **Spring Boot**, and **Spring Data JPA**.
+2. **[TEMS](https://tems2.vercel.app/)** — Enterprise-grade transport management platform built with **Java 21**, **Spring Boot**, and **Spring Data JPA**.
 3. **SpendSenseAI** — AI finance tracker using OCR and local LLMs (Ollama) to extract and categorize 95%+ of bank transactions automatically.
 4. **[MindTiles](https://mindtiles.vercel.app)** — Focus-driven memory card game with silky 60fps spring animations using React, Vite, and Framer Motion.
-5. **[Fake News Detection](https://github.com/thisispit/FakeNewsDetection)** — NLP machine learning pipeline detecting deceptive news articles using Scikit-Learn.
-6. **[Drizzzle](https://drizzzlerain.web.app/)** — High-throughput async backend with FastAPI and SQL.
+5. **[JamFlow](https://jamflow.world)** — Music streaming and discovery platform with seamless playback and curated playlists.
+6. **[Fake News Detection](https://github.com/thisispit/FakeNewsDetection)** — NLP machine learning pipeline detecting deceptive news articles using Scikit-Learn.
+7. **[Drizzzle](https://drizzzlerain.web.app/)** — High-throughput async backend with FastAPI and SQL.
 
 Curious about the technical architecture behind any of them?`,
   },
@@ -107,6 +109,17 @@ Curious about the technical architecture behind any of them?`,
 - **Source Code:** [GitHub Repository](https://github.com/thisispit/MindTiles)
 
 The key focus was designing a seamless state machine for flip timings and smooth gesture physics without UI lag.`,
+  },
+  {
+    // JamFlow
+    matches: (q) => q.includes("jamflow") || (q.includes("music") && (q.includes("project") || q.includes("app") || q.includes("streaming"))),
+    response: `**[JamFlow](https://jamflow.world)** is a music streaming and discovery platform I built for a clean, distraction-free listening experience.
+
+- **Stack:** \`React\`, \`TypeScript\`, \`Tailwind CSS\`
+- **Live Demo:** [jamflow.world](https://jamflow.world)
+- **Source Code:** [GitHub Repository](https://github.com/thisispit/JamFlow)
+
+It features seamless audio playback, curated playlists, and a minimal editorial UI crafted for audio enthusiasts.`,
   },
   {
     // Tech stack & AI background
@@ -216,7 +229,7 @@ It details my B.Tech Data Science background (CGPA: 8.20), Java & Python project
       q.includes("college"),
     response: `I'm **Pitamber Singh** (Pitamber Kumar Singh), a B.Tech Data Science student at **Noida Institute of Engineering and Technology (NIET)**, Greater Noida (CGPA: 8.20 / 10.0).
 
-Originally from Bihar, I love building practical software that solves everyday problems—from high-performance RSS readers (**NewsFlow**) and enterprise transport management (**TEMS** in Java 21/Spring Boot) to AI financial document parsers (**SpendSenseAI**).
+Originally from Bihar, I love building practical software that solves everyday problems—from high-performance RSS readers (**NewsFlow**) and enterprise transport management (**[TEMS](https://tems2.vercel.app/)** in Java 21/Spring Boot) to AI financial document parsers (**SpendSenseAI**) and music platforms (**[JamFlow](https://jamflow.world)**).
 
 My core philosophy is **"Simplicity isn't the absence of depth—it's the removal of unnecessary complexity."** Outside coding, I cherish deep conversations over a warm cup of chai (*'Chai & Conversations'*), music, and continuous learning.
 
@@ -518,7 +531,7 @@ export async function streamChatResponse(
     ? fallbackMatch.response
     : `I'm **Pitamber Singh**, a Computer Science student and Data Engineer focusing on AI pipelines, OCR systems, and scalable backends.
 
-Feel free to explore my **[Projects](#projects)** like **[NewsFlow](https://newsflow.space)** and **[MindTiles](https://mindtiles.vercel.app)**, or download my **[Resume](/media/resume.pdf)**!`;
+Feel free to explore my **[Projects](#projects)** like **[NewsFlow](https://newsflow.space)**, **[MindTiles](https://mindtiles.vercel.app)**, and **[JamFlow](https://jamflow.world)**, or download my **[Resume](/media/resume.pdf)**!`;
 
   await streamPredefinedText(fallbackText, onChunk, signal);
 }
