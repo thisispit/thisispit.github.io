@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, User } from "lucide-react";
+import { Sparkles, User, Terminal } from "lucide-react";
 import { marked } from "marked";
 import { ChatMessage as ChatMessageType } from "@/lib/chatService";
 
@@ -26,6 +26,7 @@ marked.use({
 
 export default function ChatMessage({ message, isStreaming }: ChatMessageProps) {
   const isUser = message.role === "user";
+  const isDebug = message.isDebug;
 
   const renderedHtml = useMemo(() => {
     if (isUser) return "";
@@ -49,7 +50,9 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
           {/* Subtle ambient aura while bot is responding */}
           {isStreaming && (
             <motion.div
-              className="absolute -inset-1 rounded-full bg-foreground/10 blur-xs pointer-events-none"
+              className={`absolute -inset-1 rounded-full blur-xs pointer-events-none ${
+                isDebug ? "bg-emerald-500/20" : "bg-foreground/10"
+              }`}
               animate={{
                 scale: [1, 1.15, 1],
                 opacity: [0.3, 0.7, 0.3],
@@ -64,9 +67,13 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
           <motion.div
             animate={isStreaming ? { rotate: [0, 8, -8, 0] } : {}}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="relative w-8 h-8 rounded-full bg-background border border-foreground/15 flex items-center justify-center shadow-xs"
+            className={`relative w-8 h-8 rounded-full flex items-center justify-center shadow-xs border ${
+              isDebug
+                ? "bg-[#0c1017] border-emerald-500/30 text-emerald-400"
+                : "bg-background border-foreground/15 text-foreground"
+            }`}
           >
-            <Sparkles size={14} className="text-foreground" />
+            {isDebug ? <Terminal size={14} /> : <Sparkles size={14} />}
           </motion.div>
         </div>
       )}
@@ -76,16 +83,37 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
         className={`relative text-sm shadow-soft overflow-hidden ${
           isUser
             ? "max-w-[90%] sm:max-w-[88%] bg-foreground text-background rounded-2xl rounded-tr-xs px-4 py-3 font-inter leading-relaxed"
+            : isDebug
+            ? "max-w-[95%] sm:max-w-[92%] bg-[#0d1117] text-slate-200 border border-emerald-500/30 rounded-2xl rounded-tl-xs px-4 py-3 font-mono text-xs"
             : isStreaming && !message.content.trim()
             ? "w-fit bg-white text-foreground rounded-2xl rounded-tl-xs px-4 py-2.5 border border-foreground/10 flex items-center"
             : "max-w-[90%] sm:max-w-[88%] bg-white text-foreground rounded-2xl rounded-tl-xs px-4 py-3 font-inter border border-foreground/5"
         }`}
       >
-        {/* Subtle, smooth gliding accent shimmer at the bottom of the card while streaming text */}
+        {/* Terminal Header Bar if in Debug Mode */}
+        {isDebug && !isUser && (
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10 text-[10px] text-emerald-400/80 font-mono select-none">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-red-500/70 inline-block" />
+              <span className="w-2 h-2 rounded-full bg-amber-500/70 inline-block" />
+              <span className="w-2 h-2 rounded-full bg-emerald-500/70 inline-block" />
+              <span className="ml-1 text-slate-400">pitamber@sys-core:~$</span>
+            </div>
+            <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">
+              DEBUG_LOG
+            </span>
+          </div>
+        )}
+
+        {/* Shimmer accent while streaming text */}
         {!isUser && isStreaming && message.content.trim().length > 0 && (
           <div className="absolute inset-x-0 bottom-0 h-[2px] overflow-hidden rounded-b-2xl pointer-events-none">
             <motion.div
-              className="h-full w-28 bg-gradient-to-r from-transparent via-foreground/25 to-transparent"
+              className={`h-full w-28 ${
+                isDebug
+                  ? "bg-gradient-to-r from-transparent via-emerald-400/40 to-transparent"
+                  : "bg-gradient-to-r from-transparent via-foreground/25 to-transparent"
+              }`}
               animate={{
                 x: ["-100%", "350%"],
               }}
@@ -103,13 +131,15 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
             <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
           ) : (
             <div>
-              {/* While waiting for words to start, show clean 3-dot typing wave */}
+              {/* While waiting for words to start, show 3-dot typing wave */}
               {isStreaming && !message.content.trim() ? (
                 <div className="flex items-center gap-1.5 py-1 px-0.5 select-none">
                   {[0, 1, 2].map((i) => (
                     <motion.span
                       key={i}
-                      className="w-2 h-2 rounded-full bg-foreground/60 inline-block"
+                      className={`w-2 h-2 rounded-full inline-block ${
+                        isDebug ? "bg-emerald-400/70" : "bg-foreground/60"
+                      }`}
                       animate={{
                         y: [0, -4, 0],
                         opacity: [0.35, 1, 0.35],
@@ -125,11 +155,21 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
                   ))}
                 </div>
               ) : (
-                <div className="text-foreground/90 leading-relaxed text-sm">
+                <div
+                  className={`${
+                    isDebug
+                      ? "text-slate-200 leading-relaxed text-xs font-mono"
+                      : "text-foreground/90 leading-relaxed text-sm font-inter"
+                  }`}
+                >
                   <div
-                    className={`[&>p]:my-2 [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&>ul]:my-2 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1 [&>ol]:my-2 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1 [&>li]:my-0.5 [&>code]:bg-black/5 [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded [&>code]:text-xs [&>code]:font-mono [&>pre]:bg-neutral-900 [&>pre]:text-neutral-100 [&>pre]:p-3 [&>pre]:rounded-xl [&>pre]:my-2 [&>pre]:overflow-x-auto [&>pre]:text-xs [&>pre]:font-mono ${
+                    className={`${
+                      isDebug
+                        ? "[&>p]:my-1.5 [&>pre]:bg-black/60 [&>pre]:text-emerald-300 [&>pre]:p-2.5 [&>pre]:rounded-lg [&>pre]:border [&>pre]:border-emerald-500/20 [&>code]:bg-white/10 [&>code]:text-emerald-300 [&>code]:px-1 [&>code]:py-0.5 [&>code]:rounded"
+                        : "[&>p]:my-2 [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&>ul]:my-2 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1 [&>ol]:my-2 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1 [&>li]:my-0.5 [&>code]:bg-black/5 [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded [&>code]:text-xs [&>code]:font-mono [&>pre]:bg-neutral-900 [&>pre]:text-neutral-100 [&>pre]:p-3 [&>pre]:rounded-xl [&>pre]:my-2 [&>pre]:overflow-x-auto [&>pre]:text-xs [&>pre]:font-mono"
+                    } ${
                       isStreaming
-                        ? "[&>*:last-child]:after:content-[''] [&>*:last-child]:after:inline-block [&>*:last-child]:after:w-1.5 [&>*:last-child]:after:h-4 [&>*:last-child]:after:ml-1.5 [&>*:last-child]:after:bg-foreground [&>*:last-child]:after:align-middle [&>*:last-child]:after:animate-pulse [&>*:last-child]:after:rounded-xs"
+                        ? "[&>*:last-child]:after:content-[''] [&>*:last-child]:after:inline-block [&>*:last-child]:after:w-1.5 [&>*:last-child]:after:h-4 [&>*:last-child]:after:ml-1.5 [&>*:last-child]:after:bg-current [&>*:last-child]:after:align-middle [&>*:last-child]:after:animate-pulse [&>*:last-child]:after:rounded-xs"
                         : ""
                     }`}
                     dangerouslySetInnerHTML={{ __html: renderedHtml }}
@@ -139,6 +179,36 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
             </div>
           )}
         </div>
+
+        {/* Chai Meter: subtle, playful personality rating on assistant messages */}
+        {!isUser && message.chaiMeter && (!isStreaming || message.content.trim().length > 30) && (
+          <div
+            className={`mt-2.5 pt-2 flex items-center justify-between text-[11px] select-none ${
+              isDebug
+                ? "border-t border-white/10 text-slate-400 font-mono text-[10px]"
+                : "border-t border-foreground/5 text-foreground/50 font-inter"
+            }`}
+          >
+            <div className="flex items-center gap-1.5">
+              <span className="tracking-widest">{message.chaiMeter.cups}</span>
+              <span
+                className={`font-medium ${
+                  isDebug ? "text-emerald-400" : "text-foreground/75"
+                }`}
+              >
+                {message.chaiMeter.label}
+              </span>
+            </div>
+            <span
+              className={`text-[10px] ${
+                isDebug ? "text-slate-500" : "text-foreground/40"
+              }`}
+              title={message.chaiMeter.note}
+            >
+              Chai Meter: {message.chaiMeter.score}/5
+            </span>
+          </div>
+        )}
       </div>
 
       {/* User Avatar */}

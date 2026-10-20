@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { X, RotateCcw, Sparkles } from "lucide-react";
+import { X, RotateCcw, Sparkles, Terminal, Moon, Sun, Briefcase, Code, Handshake } from "lucide-react";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import SuggestedPrompts from "./SuggestedPrompts";
-import { ChatMessage as ChatMessageType } from "@/lib/chatService";
+import { ChatMessage as ChatMessageType, VisitorIntent, getIndianTimeInfo } from "@/lib/chatService";
 
 interface ChatWindowProps {
   isOpen: boolean;
@@ -18,6 +18,9 @@ interface ChatWindowProps {
   streamingMessageId: string | null;
   onSendMessage: (text: string) => void;
   onStopStreaming: () => void;
+  isDebugMode?: boolean;
+  onToggleDebug?: () => void;
+  visitorIntent?: VisitorIntent;
 }
 
 export default function ChatWindow({
@@ -29,9 +32,22 @@ export default function ChatWindow({
   streamingMessageId,
   onSendMessage,
   onStopStreaming,
+  isDebugMode = false,
+  onToggleDebug,
+  visitorIntent = "curious",
 }: ChatWindowProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [timeInfo, setTimeInfo] = useState(getIndianTimeInfo);
+
+  // Update time info periodically
+  useEffect(() => {
+    setTimeInfo(getIndianTimeInfo());
+    const interval = setInterval(() => {
+      setTimeInfo(getIndianTimeInfo());
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Auto scroll cleanly without jitter
   useEffect(() => {
@@ -50,18 +66,34 @@ export default function ChatWindow({
 
   if (!isOpen) return null;
 
+  const isNight = timeInfo.period === "late-night";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 16, scale: 0.97 }}
       transition={{ type: "spring", stiffness: 350, damping: 28 }}
-      className="fixed bottom-[86px] right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[480px] md:w-[500px] h-[580px] max-h-[85vh] bg-secondary-background rounded-3xl shadow-soft-lg border border-foreground/10 flex flex-col overflow-hidden will-change-transform"
+      className={`fixed bottom-[86px] right-4 sm:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[480px] md:w-[500px] h-[580px] max-h-[85vh] rounded-3xl shadow-soft-lg flex flex-col overflow-hidden will-change-transform border transition-colors ${
+        isDebugMode
+          ? "bg-[#0c1017] border-emerald-500/30 text-slate-100"
+          : "bg-secondary-background border-foreground/10 text-foreground"
+      }`}
     >
       {/* 1. Header */}
-      <div className="px-5 py-4 bg-white/90 backdrop-blur-md border-b border-foreground/10 flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="relative w-9 h-9 rounded-full bg-background overflow-hidden border border-foreground/10 shadow-xs shrink-0">
+      <div
+        className={`px-4 sm:px-5 py-3.5 border-b backdrop-blur-md flex items-center justify-between shrink-0 transition-colors ${
+          isDebugMode
+            ? "bg-[#0d131d]/95 border-emerald-500/20 text-slate-200"
+            : "bg-white/90 border-foreground/10 text-foreground"
+        }`}
+      >
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div
+            className={`relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border shadow-xs shrink-0 ${
+              isDebugMode ? "border-emerald-500/40 bg-black" : "border-foreground/10 bg-background"
+            }`}
+          >
             <Image
               src="/media/img/profile4.png"
               alt="Pitamber Singh"
@@ -69,36 +101,75 @@ export default function ChatWindow({
               className="object-cover"
             />
           </div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-sm font-poppins font-bold tracking-tight text-foreground">
-              Pitamber&apos;s AI
-            </h3>
-            <span
-              className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[9px] font-semibold border transition-all duration-300 ${
-                isLoading
-                  ? "bg-foreground/5 text-foreground border-foreground/15"
-                  : "bg-emerald-50 text-emerald-700 border-emerald-200"
-              }`}
-            >
-              <span className="relative flex h-1.5 w-1.5">
-                <span
-                  className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                    isLoading ? "bg-foreground/40" : "bg-emerald-400"
-                  }`}
-                />
-                <span
-                  className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
-                    isLoading ? "bg-foreground/75" : "bg-emerald-500"
-                  }`}
-                />
+
+          <div className="flex flex-col min-w-0">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <h3 className="text-xs sm:text-sm font-poppins font-bold tracking-tight truncate">
+                {isDebugMode ? "Pitamber Terminal" : "Pitamber's AI"}
+              </h3>
+
+              {/* Visitor Intent Badge */}
+              {visitorIntent === "recruiter" && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                  <Briefcase size={10} />
+                  <span>Recruiter</span>
+                </span>
+              )}
+              {visitorIntent === "engineer" && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+                  <Code size={10} />
+                  <span>Dev View</span>
+                </span>
+              )}
+              {visitorIntent === "collaborator" && (
+                <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <Handshake size={10} />
+                  <span>Collab</span>
+                </span>
+              )}
+            </div>
+
+            {/* Time-Aware Subtitle */}
+            <div className="flex items-center gap-1.5 text-[10px] text-foreground/50">
+              <span className="inline-flex items-center gap-1">
+                {isNight ? <Moon size={10} className="text-indigo-400" /> : <Sun size={10} className="text-amber-500" />}
+                <span>{timeInfo.timeString} IST</span>
               </span>
-              {isLoading ? "Responding..." : "Online"}
-            </span>
+              <span className="text-foreground/30">•</span>
+              <span
+                className={`inline-flex items-center gap-1 font-medium ${
+                  isLoading
+                    ? "text-foreground/70"
+                    : isDebugMode
+                    ? "text-emerald-400"
+                    : "text-emerald-600"
+                }`}
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
+                {isLoading ? "Typing..." : isDebugMode ? "Terminal" : "Online"}
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Header Action Buttons */}
-        <div className="flex items-center gap-1 text-foreground/50">
+        <div className="flex items-center gap-1 text-foreground/50 shrink-0">
+          {/* Debug Mode Toggle */}
+          <button
+            type="button"
+            onClick={onToggleDebug}
+            title={isDebugMode ? "Exit developer mode" : "Toggle developer mode (/debug)"}
+            aria-label="Toggle developer mode"
+            className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold tracking-wider transition-all flex items-center gap-1 border cursor-pointer ${
+              isDebugMode
+                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40 shadow-xs"
+                : "bg-foreground/5 text-foreground/60 border-foreground/10 hover:text-foreground hover:bg-foreground/10"
+            }`}
+          >
+            <Terminal size={11} />
+            <span>DEV</span>
+          </button>
+
           <button
             type="button"
             onClick={onClearHistory}
@@ -106,7 +177,7 @@ export default function ChatWindow({
             aria-label="Reset conversation"
             className="w-8 h-8 rounded-full hover:bg-foreground/5 hover:text-foreground flex items-center justify-center transition-colors cursor-pointer"
           >
-            <RotateCcw size={15} />
+            <RotateCcw size={14} />
           </button>
           <button
             type="button"
@@ -115,7 +186,7 @@ export default function ChatWindow({
             aria-label="Close chat"
             className="w-8 h-8 rounded-full hover:bg-foreground/5 hover:text-foreground flex items-center justify-center transition-colors cursor-pointer"
           >
-            <X size={17} />
+            <X size={16} />
           </button>
         </div>
       </div>
@@ -123,30 +194,68 @@ export default function ChatWindow({
       {/* 2. Messages Viewport */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto px-5 py-4 space-y-2 no-scrollbar"
+        className="flex-1 overflow-y-auto px-4 sm:px-5 py-4 space-y-2 no-scrollbar"
       >
         {/* Welcome Greeting Banner */}
-        <div className="p-4 bg-white/70 rounded-2xl border border-foreground/5 mb-4 shadow-xs">
-          <div className="flex items-center gap-2 mb-2 text-foreground font-poppins font-bold text-xs uppercase tracking-wider">
-            <Sparkles size={14} className="text-foreground/70" />
-            <span>Hey there! 👋</span>
+        <div
+          className={`p-4 rounded-2xl border mb-4 shadow-xs transition-colors ${
+            isDebugMode
+              ? "bg-[#0f1622] border-emerald-500/20 text-slate-300 font-mono text-xs"
+              : "bg-white/70 border-foreground/5 text-foreground font-inter"
+          }`}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-1.5 font-poppins font-bold text-xs uppercase tracking-wider">
+              {isDebugMode ? (
+                <>
+                  <Terminal size={13} className="text-emerald-400" />
+                  <span className="text-emerald-400 font-mono text-xs">PITAMBER OS v2.1</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={14} className="text-foreground/70" />
+                  <span>Hey there! 👋</span>
+                </>
+              )}
+            </div>
+
+            {/* Time-Aware Micro-Status */}
+            <span
+              className={`text-[10px] px-2 py-0.5 rounded-full border ${
+                isDebugMode
+                  ? "bg-emerald-950/30 text-emerald-300 border-emerald-500/30"
+                  : "bg-foreground/5 text-foreground/60 border-foreground/10"
+              }`}
+            >
+              {timeInfo.statusText}
+            </span>
           </div>
-          <p className="text-xs text-foreground/75 leading-relaxed font-inter">
-            Glad you dropped by. I&apos;m here to give you a little more insight into Pit—his work, engineering background, skills, and journey.
+
+          <p className="text-xs text-foreground/75 leading-relaxed">
+            {isDebugMode
+              ? "Developer terminal mode enabled. Query runtime telemetry, architecture specs, or type /exit to leave."
+              : "Glad you dropped by. I'm here to give you insight into Pit—his engineering background, projects, Java/Python stack, and journey."}
           </p>
-          <p className="text-xs text-foreground/75 leading-relaxed font-inter mt-1.5">
-            Feel free to ask me anything:
+
+          <p className="text-xs text-foreground/75 leading-relaxed mt-1.5">
+            {isDebugMode ? "Quick commands:" : "Feel free to ask me anything:"}
           </p>
 
           <SuggestedPrompts
             onSelectPrompt={onSendMessage}
             disabled={isLoading}
+            isDebugMode={isDebugMode}
           />
         </div>
 
-        {/* Message Thread (renders user messages, messages with content, and active streaming message) */}
+        {/* Message Thread */}
         {messages
-          .filter((msg) => msg.role === "user" || msg.content.trim().length > 0 || msg.id === streamingMessageId)
+          .filter(
+            (msg) =>
+              msg.role === "user" ||
+              msg.content.trim().length > 0 ||
+              msg.id === streamingMessageId
+          )
           .map((msg) => (
             <ChatMessage
               key={msg.id}
@@ -163,6 +272,11 @@ export default function ChatWindow({
         onSendMessage={onSendMessage}
         onStopStreaming={onStopStreaming}
         isLoading={isLoading}
+        placeholder={
+          isDebugMode
+            ? "Enter command (/sysinfo, /stack, /projects, /exit)..."
+            : "Ask anything about projects, stack, or type /debug..."
+        }
       />
     </motion.div>
   );

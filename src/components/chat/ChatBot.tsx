@@ -4,7 +4,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { AnimatePresence } from "framer-motion";
 import ChatTrigger from "./ChatTrigger";
 import ChatWindow from "./ChatWindow";
-import { ChatMessage, streamChatResponse } from "@/lib/chatService";
+import {
+  ChatMessage,
+  streamChatResponse,
+  detectVisitorIntent,
+  evaluateChaiMeter,
+  VisitorIntent,
+} from "@/lib/chatService";
 
 const STORAGE_KEY = "pitamber_portfolio_chat_v1";
 
@@ -15,7 +21,6 @@ function isPageReload(): boolean {
     if (navEntries.length > 0) {
       return (navEntries[0] as PerformanceNavigationTiming).type === "reload";
     }
-    // Fallback for older browser engines
     return (window.performance as unknown as { navigation?: { type: number } }).navigation?.type === 1;
   } catch {
     return false;
@@ -24,10 +29,12 @@ function isPageReload(): boolean {
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDebugMode, setIsDebugMode] = useState(false);
+  const [visitorIntent, setVisitorIntent] = useState<VisitorIntent>("curious");
+
   const [messages, setMessages] = useState<ChatMessage[]>(() => {
     if (typeof window === "undefined") return [];
     try {
-      // If the page was refreshed (F5 / reload), reset the chat
       if (isPageReload()) {
         sessionStorage.removeItem(STORAGE_KEY);
         return [];
@@ -68,6 +75,17 @@ export default function ChatBot() {
     setIsOpen(false);
   };
 
+  const handleToggleDebug = () => {
+    setIsDebugMode((prev) => {
+      const next = !prev;
+      if (next && messages.length === 0) {
+        // Send /debug command immediately if chat is empty
+        handleSendMessage("/debug");
+      }
+      return next;
+    });
+  };
+
   const handleClearHistory = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
@@ -75,6 +93,8 @@ export default function ChatBot() {
     setMessages([]);
     setIsLoading(false);
     setStreamingMessageId(null);
+    setIsDebugMode(false);
+    setVisitorIntent("curious");
     try {
       sessionStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -92,13 +112,36 @@ export default function ChatBot() {
   };
 
   const handleSendMessage = async (text: string) => {
-    if (!text.trim() || isLoading) return;
+    const trimmed = text.trim();
+    if (!trimmed || isLoading) return;
+
+    const lower = trimmed.toLowerCase();
+
+    // Check if user is toggling debug mode via chat commands
+    let activeDebug = isDebugMode;
+    if (lower === "/debug" || lower === "debug" || lower === "--debug") {
+      activeDebug = true;
+      setIsDebugMode(true);
+    } else if (lower === "/exit" || lower === "exit" || lower === ":q" || lower === "quit") {
+      activeDebug = false;
+      setIsDebugMode(false);
+    }
+
+    // Detect visitor intent
+    const detectedIntent = detectVisitorIntent(trimmed, messages);
+    if (detectedIntent !== "curious" && visitorIntent === "curious") {
+      setVisitorIntent(detectedIntent);
+    }
+
+    // Evaluate Chai Meter
+    const chaiMeter = evaluateChaiMeter(trimmed, detectedIntent, activeDebug);
 
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
       role: "user",
-      content: text.trim(),
+      content: trimmed,
       timestamp: Date.now(),
+      isDebug: activeDebug,
     };
 
     const assistantMsgId = `assistant-${Date.now()}`;
@@ -107,6 +150,9 @@ export default function ChatBot() {
       role: "assistant",
       content: "",
       timestamp: Date.now(),
+      chaiMeter,
+      isDebug: activeDebug,
+      intent: detectedIntent,
     };
 
     const newMessages = [...messages, userMessage];
@@ -129,7 +175,11 @@ export default function ChatBot() {
             )
           );
         },
-        controller.signal
+        controller.signal,
+        {
+          isDebug: activeDebug,
+          intent: detectedIntent,
+        }
       );
     } catch (err: unknown) {
       if ((err as Error)?.name !== "AbortError") {
@@ -167,6 +217,9 @@ export default function ChatBot() {
             streamingMessageId={streamingMessageId}
             onSendMessage={handleSendMessage}
             onStopStreaming={handleStopStreaming}
+            isDebugMode={isDebugMode}
+            onToggleDebug={handleToggleDebug}
+            visitorIntent={visitorIntent}
           />
         )}
       </AnimatePresence>

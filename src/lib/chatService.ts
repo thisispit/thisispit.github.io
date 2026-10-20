@@ -1,10 +1,414 @@
-﻿import { PORTFOLIO_DATA, SYSTEM_PROMPT } from "@/data/portfolioKnowledge";
+import { PORTFOLIO_DATA, SYSTEM_PROMPT } from "@/data/portfolioKnowledge";
+
+export type VisitorIntent = "recruiter" | "engineer" | "collaborator" | "curious";
+
+export interface IndianTimeInfo {
+  timeString: string;
+  hour: number;
+  period: "late-night" | "morning" | "afternoon" | "evening";
+  statusText: string;
+  greeting: string;
+}
+
+export interface ChaiEvaluation {
+  score: number; // 1 to 5
+  cups: string;
+  label: string;
+  note: string;
+}
 
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant" | "system";
   content: string;
   timestamp?: number;
+  chaiMeter?: ChaiEvaluation;
+  isDebug?: boolean;
+  intent?: VisitorIntent;
+}
+
+/**
+ * Calculates current real-time status in Indian Standard Time (IST, UTC+5:30).
+ */
+export function getIndianTimeInfo(): IndianTimeInfo {
+  try {
+    const now = new Date();
+    const istFormatter = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    const timeString = istFormatter.format(now);
+
+    const istHourFormatter = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Kolkata",
+      hour: "numeric",
+      hour12: false,
+    });
+    const hour = parseInt(istHourFormatter.format(now), 10);
+
+    let period: IndianTimeInfo["period"] = "afternoon";
+    let statusText = "Greater Noida, IN • Online";
+    let greeting = `Hey! It's ${timeString} IST in Greater Noida.`;
+
+    if (hour >= 23 || hour < 5) {
+      period = "late-night";
+      statusText = `Greater Noida • ${timeString} IST • Late night coding 🌙`;
+      greeting = `Hey! It's late night (${timeString} IST) here in Greater Noida. I'm usually up debugging, tuning models, or sipping midnight chai!`;
+    } else if (hour >= 5 && hour < 12) {
+      period = "morning";
+      statusText = `Greater Noida • ${timeString} IST • Morning chai ☕`;
+      greeting = `Good morning! It's ${timeString} IST in Greater Noida. Starting the day with fresh chai and deep focus.`;
+    } else if (hour >= 12 && hour < 17) {
+      period = "afternoon";
+      statusText = `Greater Noida • ${timeString} IST • Building systems ⚡`;
+      greeting = `Good afternoon! It's ${timeString} IST in Greater Noida. In the zone building and engineering systems.`;
+    } else {
+      period = "evening";
+      statusText = `Greater Noida • ${timeString} IST • Chai & Conversations ☕`;
+      greeting = `Good evening! It's ${timeString} IST in Greater Noida—prime time for warm chai and thoughtful tech discussions.`;
+    }
+
+    return { timeString, hour, period, statusText, greeting };
+  } catch {
+    return {
+      timeString: "IST",
+      hour: 14,
+      period: "afternoon",
+      statusText: "Greater Noida, IN • Online",
+      greeting: "Hey there! Glad you stopped by.",
+    };
+  }
+}
+
+/**
+ * Silently analyzes incoming prompts and conversation history to classify visitor intent.
+ */
+export function detectVisitorIntent(
+  query: string,
+  pastMessages: ChatMessage[] = []
+): VisitorIntent {
+  const allText = [
+    ...pastMessages.map((m) => m.content),
+    query,
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  // Recruiter keywords
+  const recruiterPatterns = [
+    /\bhire\b/,
+    /\bhiring\b/,
+    /\bresume\b/,
+    /\bcv\b/,
+    /\bsalary\b/,
+    /\bcompensation\b/,
+    /\binterview\b/,
+    /\bjob\b/,
+    /\brole\b/,
+    /\bposition\b/,
+    /\bfull-?time\b/,
+    /\binternship\b/,
+    /\bavailability\b/,
+    /\bnotice period\b/,
+    /\bcandidate\b/,
+    /\bexperience\b/,
+    /\brecruiter\b/,
+    /\btalent\b/,
+  ];
+  if (recruiterPatterns.some((pattern) => pattern.test(allText))) {
+    return "recruiter";
+  }
+
+  // Engineer / Architecture keywords
+  const engineerPatterns = [
+    /\barchitecture\b/,
+    /\bhurdle\b/,
+    /\btech stack\b/,
+    /\bconcurrency\b/,
+    /\bdeduplication\b/,
+    /\bbenchmark\b/,
+    /\bapi\b/,
+    /\bspring\b/,
+    /\bfastapi\b/,
+    /\bpostgres\b/,
+    /\bsqlite\b/,
+    /\bsupabase\b/,
+    /\bocr\b/,
+    /\bollama\b/,
+    /\bllm\b/,
+    /\bpytorch\b/,
+    /\blatency\b/,
+    /\bcode\b/,
+    /\brepo\b/,
+    /\bgithub\b/,
+    /\btypescript\b/,
+    /\bjava\b/,
+    /\bpython\b/,
+    /\bscalab/,
+    /\bcompiler\b/,
+    /\bstate machine\b/,
+  ];
+  if (engineerPatterns.some((pattern) => pattern.test(allText))) {
+    return "engineer";
+  }
+
+  // Collaborator / Founder
+  const collabPatterns = [
+    /\bcollab\b/,
+    /\bcollaborat/,
+    /\bpartner\b/,
+    /\bbuild together\b/,
+    /\bstartup\b/,
+    /\bidea\b/,
+    /\bhackathon\b/,
+    /\bco-?found/,
+  ];
+  if (collabPatterns.some((pattern) => pattern.test(allText))) {
+    return "collaborator";
+  }
+
+  return "curious";
+}
+
+/**
+ * Chai Meter: rates each interaction on a 1-5 ☕ scale reflecting
+ * depth, technical complexity, and conversational resonance.
+ */
+export function evaluateChaiMeter(
+  query: string,
+  intent: VisitorIntent = "curious",
+  isDebug?: boolean
+): ChaiEvaluation {
+  if (isDebug) {
+    return {
+      score: 5,
+      cups: "☕☕☕☕☕",
+      label: "Kernel Chai",
+      note: "Terminal diagnostic execution",
+    };
+  }
+
+  const q = query.toLowerCase();
+
+  // 5 Cups: Deep architecture, system design, high concurrency
+  if (
+    q.includes("hurdle") ||
+    q.includes("concurrency") ||
+    q.includes("deduplication") ||
+    q.includes("stream") ||
+    q.includes("pipeline") ||
+    q.includes("architecture") ||
+    q.includes("layer") ||
+    q.includes("ocr") ||
+    q.includes("ollama") ||
+    q.includes("spring data jpa")
+  ) {
+    return {
+      score: 5,
+      cups: "☕☕☕☕☕",
+      label: "Karak Chai Masterclass",
+      note: "Maximum technical depth & systems design",
+    };
+  }
+
+  // 4 Cups: Specific projects & frameworks
+  if (
+    q.includes("newsflow") ||
+    q.includes("tems") ||
+    q.includes("mindtiles") ||
+    q.includes("jamflow") ||
+    q.includes("spendsense") ||
+    q.includes("fastapi") ||
+    q.includes("java") ||
+    q.includes("spring") ||
+    q.includes("react") ||
+    intent === "engineer"
+  ) {
+    return {
+      score: 4,
+      cups: "☕☕☕☕",
+      label: "Deep Tech Discussion",
+      note: "Solid engineering enquiry",
+    };
+  }
+
+  // 3 Cups: Skills, experience, projects overview, recruitment
+  if (
+    q.includes("project") ||
+    q.includes("tech stack") ||
+    q.includes("skills") ||
+    q.includes("experience") ||
+    intent === "recruiter" ||
+    intent === "collaborator"
+  ) {
+    return {
+      score: 3,
+      cups: "☕☕☕",
+      label: "Thoughtful Conversation",
+      note: "Portfolio & technical depth",
+    };
+  }
+
+  // 2 Cups: Resume, contact, education
+  if (
+    q.includes("resume") ||
+    q.includes("cv") ||
+    q.includes("contact") ||
+    q.includes("email") ||
+    q.includes("college") ||
+    q.includes("niet") ||
+    q.includes("about") ||
+    q.includes("who are you")
+  ) {
+    return {
+      score: 2,
+      cups: "☕☕",
+      label: "Fresh Brew",
+      note: "Getting to know Pitamber",
+    };
+  }
+
+  // 1 Cup: Casual greeting
+  return {
+    score: 1,
+    cups: "☕",
+    label: "Quick Sip",
+    note: "Casual greeting & chat",
+  };
+}
+
+/**
+ * Generates terminal telemetry responses for Debug Mode.
+ */
+export function generateDebugResponse(rawCommand: string): string {
+  const cmd = rawCommand.trim().toLowerCase();
+
+  if (cmd === "/debug" || cmd === "debug" || cmd === "--debug") {
+    return `\`\`\`bash
+[SYS: OK] TERMINAL DEBUG INTERFACE INITIALIZED
+HOST: pitamber-core-v2.1 (arch: x86_64-data-engineer)
+TIME: ${getIndianTimeInfo().timeString} IST | LOCATION: Greater Noida, UP, IN
+STATUS: 200 OK | UPTIME: 99.98% | REPO: github.com/thisispit
+
+AVAILABLE DIAGNOSTIC COMMANDS:
+  /sysinfo   - Runtime specs, education & node health
+  /stack     - Languages, enterprise backends & AI toolchains
+  /projects  - Microservice repos, live endpoints & status
+  /exit      - Terminate debug session & return to warm persona
+
+HINT: Normal questions in debug mode stream telemetry headers!
+\`\`\``;
+  }
+
+  if (cmd === "/sysinfo" || cmd === "sysinfo" || cmd === "specs") {
+    return `\`\`\`bash
+[DIAGNOSTIC: NODE SPECIFICATIONS]
+==================================================
+OPERATOR      : Pitamber Kumar Singh (Pitamber Singh)
+ROLE          : Data Engineer & B.Tech Data Science Student
+ACADEMICS     : NIET Greater Noida (2023-2027) | CGPA: 8.20 / 10.0
+PRIMARY CORES : Java 21 LTS | Python 3.12 | TypeScript 5.5
+CERTIFICATIONS: NCET+ SDE (Java) [2026] | AWS Cloud Architecting [2026]
+MEMORY HEAP   : Optimal | Thread Safety: Guaranteed
+COMMUNICATION : pitambersiingh@gmail.com | linkedin.com/in/singhpitamber
+==================================================
+STATUS: ALL SYSTEMS NOMINAL
+\`\`\``;
+  }
+
+  if (cmd === "/stack" || cmd === "stack" || cmd === "tools") {
+    return `\`\`\`bash
+[DEPENDENCY MATRIX & TOOLCHAINS]
+----------------------------------------------------------------------
+BACKEND / ENTERPRISE : Spring Boot 3.x, Spring Data JPA, JDBC, REST, FastAPI
+LANGUAGES            : Java 21 (NCET+ Certified), Python, TypeScript, SQL, C
+DATA & AI ENGINE     : Pandas, NumPy, Scikit-Learn, PyTorch, Ollama, PaddleOCR
+FRONTEND & UI        : Next.js 15 (App Router), React 19, Tailwind CSS, Framer Motion
+DATABASE CLUSTER     : PostgreSQL (Supabase), SQLite 3, MySQL
+ENVIRONMENT          : Linux / Unix, Git, IntelliJ IDEA, VS Code
+----------------------------------------------------------------------
+EXECUTION SPEED: Sub-200ms edge response latency verified
+\`\`\``;
+  }
+
+  if (cmd === "/projects" || cmd === "projects" || cmd === "ps") {
+    return `\`\`\`bash
+[CONTAINER / REPOSITORY MANIFEST]
+PID   NAME           TECH STACK              ENDPOINT / REPO
+----------------------------------------------------------------------
+101   NewsFlow       Next.js + Supabase      https://newsflow.space
+102   TEMS           Java 21 + Spring Boot   https://tems2.vercel.app/
+103   SpendSenseAI   Python + OCR + Ollama   github.com/thisispit
+104   MindTiles      React + Framer Motion   https://mindtiles.vercel.app
+105   JamFlow        React + TypeScript      https://jamflow.world
+106   FakeNewsDet    Python + Scikit-Learn   github.com/thisispit/FakeNewsDetection
+107   Drizzzle       FastAPI + SQL + React   https://drizzzlerain.web.app/
+108   Screeeny       Chrome Ext (M3 UI)      github.com/thisispit/Screeeny
+----------------------------------------------------------------------
+TOTAL: 8 DEPLOYMENTS | STATUS: ACTIVE & HEALTHY
+\`\`\``;
+  }
+
+  if (cmd === "/exit" || cmd === "exit" || cmd === ":q" || cmd === "quit") {
+    return `Exited debug mode. Back to normal conversation! Feel free to ask anything about my work, journey, or chai philosophy.`;
+  }
+
+  return `\`\`\`bash
+[TELEMETRY] Query: "${rawCommand}"
+[STATUS: 200 OK] Executing through Data Engineering stack...
+\`\`\``;
+}
+
+/**
+ * Builds dynamic system prompt incorporating real-time IST time, intent tailoring, and debug mode overrides.
+ */
+export function buildSystemPrompt(options?: { isDebug?: boolean; intent?: VisitorIntent }): string {
+  const timeInfo = getIndianTimeInfo();
+  const intent = options?.intent || "curious";
+  const isDebug = options?.isDebug || false;
+
+  let dynamicAdditions = `
+CURRENT REAL-TIME CONTEXT:
+- Real local time at Pitamber's location: ${timeInfo.timeString} IST (Greater Noida, Uttar Pradesh, India).
+- Current period: ${timeInfo.period} (${timeInfo.statusText}).
+- If greeted or asked about current time/location, acknowledge the time naturally in first-person (${timeInfo.greeting}).
+- Detected visitor intent: ${intent.toUpperCase()}.
+`;
+
+  if (intent === "recruiter") {
+    dynamicAdditions += `
+TAILORING FOR RECRUITER / HIRING MANAGER:
+- The visitor appears to be a recruiter or hiring manager.
+- Emphasize work ethic, strong foundation in Java 21 / Spring Boot & Python Data Science, 8.20 CGPA at NIET, certifications (NCET+ SDE Java, AWS Cloud), and direct email ([pitambersiingh@gmail.com](mailto:pitambersiingh@gmail.com)) / [Resume](/media/resume.pdf).
+- Keep it articulate, confident, and proactive.
+`;
+  } else if (intent === "engineer") {
+    dynamicAdditions += `
+TAILORING FOR ENGINEER / DEVELOPER:
+- The visitor is a fellow developer/engineer.
+- Speak peer-to-peer! Highlight technical trade-offs, concurrency challenges, schema deduplication, OCR quantization with Ollama, spring physics animations, and clean code.
+- Mention specific architectural details (e.g., layered architecture in TEMS, streaming RSS parsing in NewsFlow).
+`;
+  } else if (intent === "collaborator") {
+    dynamicAdditions += `
+TAILORING FOR COLLABORATOR:
+- The visitor is interested in collaborating or building together.
+- Highlight openness to exciting side-projects, hackathons, and practical AI tools. Mention reaching out via email or LinkedIn.
+`;
+  }
+
+  if (isDebug) {
+    dynamicAdditions += `
+CRITICAL DEBUG MODE OVERRIDE:
+- You are running in DEV / TERMINAL DEBUG MODE.
+- Format responses with terminal diagnostics, monospace blocks, log tags like [OK], [WARN], [TRACE], structured summaries, and developer wit.
+- Provide deep technical precision. Keep explanations tight and telemetry-rich.
+`;
+  }
+
+  return `${SYSTEM_PROMPT}\n${dynamicAdditions}`;
 }
 
 /**
@@ -112,7 +516,10 @@ The key focus was designing a seamless state machine for flip timings and smooth
   },
   {
     // JamFlow
-    matches: (q) => q.includes("jamflow") || (q.includes("music") && (q.includes("project") || q.includes("app") || q.includes("streaming"))),
+    matches: (q) =>
+      q.includes("jamflow") ||
+      (q.includes("music") &&
+        (q.includes("project") || q.includes("app") || q.includes("streaming"))),
     response: `**[JamFlow](https://jamflow.world)** is a music streaming and discovery platform I built for a clean, distraction-free listening experience.
 
 - **Stack:** \`React\`, \`TypeScript\`, \`Tailwind CSS\`
@@ -274,14 +681,12 @@ function decodeKey(encoded: string): string {
 function getAvailableGeminiKeys(): string[] {
   const keys: string[] = [];
 
-  // Comma-separated list if provided via env / GitHub secret
   if (process.env.NEXT_PUBLIC_GEMINI_API_KEYS) {
     keys.push(
       ...process.env.NEXT_PUBLIC_GEMINI_API_KEYS.split(",").map((k) => k.trim())
     );
   }
 
-  // Individual environment variables
   if (process.env.NEXT_PUBLIC_GEMINI_API_KEY) {
     keys.push(process.env.NEXT_PUBLIC_GEMINI_API_KEY.trim());
   }
@@ -289,15 +694,12 @@ function getAvailableGeminiKeys(): string[] {
     keys.push(process.env.NEXT_PUBLIC_GEMINI_BACKUP_KEY.trim());
   }
 
-  // Include built-in 6-key fallback pool
   const decodedFallbacks = ENCODED_FALLBACK_KEYS.map(decodeKey).filter(Boolean);
   keys.push(...decodedFallbacks);
 
-  // Deduplicate and filter out empty strings
   return Array.from(new Set(keys.filter((k) => k.length > 0)));
 }
 
-// Active key pointer for seamless automatic failover
 let activeKeyIndex = 0;
 
 /**
@@ -307,17 +709,16 @@ async function streamFromGeminiDirect(
   apiKey: string,
   modelName: string,
   messages: ChatMessage[],
+  systemPrompt: string,
   onChunk: (chunk: string) => void,
   signal?: AbortSignal
 ): Promise<void> {
   const validMessages = messages.filter((m) => m.content.trim().length > 0);
 
-  // Gemini requires the conversation to start with a 'user' message
   while (validMessages.length > 0 && validMessages[0].role !== "user") {
     validMessages.shift();
   }
 
-  // Gemini requires roles to strictly alternate (user, model, user, model)
   const geminiContents: Array<{ role: "user" | "model"; parts: [{ text: string }] }> = [];
   for (const m of validMessages) {
     const role = m.role === "assistant" ? "model" : "user";
@@ -328,7 +729,6 @@ async function streamFromGeminiDirect(
     }
   }
 
-  // If no valid contents remain, fallback to the latest message as user
   if (geminiContents.length === 0 && messages.length > 0) {
     geminiContents.push({
       role: "user",
@@ -346,7 +746,7 @@ async function streamFromGeminiDirect(
     body: JSON.stringify({
       contents: geminiContents,
       systemInstruction: {
-        parts: [{ text: SYSTEM_PROMPT }],
+        parts: [{ text: systemPrompt }],
       },
       generationConfig: {
         temperature: 0.7,
@@ -397,7 +797,7 @@ async function streamFromGeminiDirect(
             }
           }
         } catch {
-          // Handle partial or malformed chunk gracefully
+          // Gracefully continue
         }
       }
     }
@@ -410,6 +810,7 @@ async function streamFromGeminiDirect(
 async function streamFromProxy(
   proxyUrl: string,
   messages: ChatMessage[],
+  systemPrompt: string,
   onChunk: (chunk: string) => void,
   signal?: AbortSignal
 ): Promise<void> {
@@ -420,7 +821,7 @@ async function streamFromProxy(
     },
     body: JSON.stringify({
       messages: messages.filter((m) => m.content.trim().length > 0),
-      systemPrompt: SYSTEM_PROMPT,
+      systemPrompt,
     }),
     signal,
   });
@@ -444,54 +845,109 @@ async function streamFromProxy(
 
 /**
  * Streams predefined text with a natural typing cadence and realistic thinking delay.
- * Simulates genuine AI generation so suggested queries feel like authentic chat interactions.
  */
 async function streamPredefinedText(
   text: string,
   onChunk: (chunk: string) => void,
   signal?: AbortSignal
 ): Promise<void> {
-  // 1. Realistic thinking delay so the user sees the bot formulating an answer
-  await new Promise((r) => setTimeout(r, 750));
+  await new Promise((r) => setTimeout(r, 600));
   if (signal?.aborted) return;
 
-  // 2. Stream tokens with natural, smooth typing rhythm
   const words = text.split(/(\s+)/);
   for (let i = 0; i < words.length; i++) {
     if (signal?.aborted) break;
     onChunk(words[i]);
-    const delay = words[i].includes("\n") ? 36 : words[i].match(/[.,?!:]/) ? 28 : 18;
+    const delay = words[i].includes("\n") ? 32 : words[i].match(/[.,?!:]/) ? 24 : 15;
     await new Promise((r) => setTimeout(r, delay));
   }
 }
 
 /**
  * Master chat streamer:
- * 1. Checks for instant pre-warmed FAQ matches (0ms response, saves API quota)
- * 2. Checks for Serverless Proxy
- * 3. Rotates through Gemini API key pool across reliable models (gemini-3.5-flash, etc.)
- * 4. Gracefully falls back to knowledge engine if offline or fully exhausted
+ * 1. Checks for Debug commands (/debug, /sysinfo, /stack, /projects, /exit)
+ * 2. Checks for real-time / time-aware queries (time, greetings, location)
+ * 3. Checks for instant pre-warmed FAQ matches
+ * 4. Calls Serverless Proxy / Gemini with dynamic time & intent-aware system prompt
+ * 5. Falls back to offline persona response if network drops
  */
 export async function streamChatResponse(
   messages: ChatMessage[],
   onChunk: (chunk: string) => void,
-  signal?: AbortSignal
+  signal?: AbortSignal,
+  options?: { isDebug?: boolean; intent?: VisitorIntent }
 ): Promise<void> {
   const lastUserMessage = [...messages].reverse().find((m) => m.role === "user");
-  const query = lastUserMessage ? lastUserMessage.content.toLowerCase().trim() : "";
+  const rawQuery = lastUserMessage ? lastUserMessage.content.trim() : "";
+  const query = rawQuery.toLowerCase();
 
-  // 1. FAST-PATH: If this is a frequent / predefined question, answer instantly (0ms latency, zero API cost)
+  // 1. FAST-PATH: Debug commands
+  if (
+    query === "/debug" ||
+    query === "debug" ||
+    query === "/sysinfo" ||
+    query === "sysinfo" ||
+    query === "/stack" ||
+    query === "stack" ||
+    query === "/projects" ||
+    query === "projects" ||
+    query === "/exit" ||
+    query === "exit"
+  ) {
+    const debugText = generateDebugResponse(query);
+    await streamPredefinedText(debugText, onChunk, signal);
+    return;
+  }
+
+  // 2. FAST-PATH: Time-aware queries
+  if (
+    query === "what time is it" ||
+    query.includes("what time is it") ||
+    query.includes("current time") ||
+    query.includes("are you awake") ||
+    query.includes("are you sleeping") ||
+    query.includes("where are you located") ||
+    query === "where are you"
+  ) {
+    const time = getIndianTimeInfo();
+    const timeResponse = `Right now, it's **${time.timeString} IST** here in Greater Noida, India (${time.statusText}).\n\n${time.greeting}\n\nWhat would you like to explore about my projects or background?`;
+    await streamPredefinedText(timeResponse, onChunk, signal);
+    return;
+  }
+
+  // 3. FAST-PATH: Time-aware greetings
+  if (
+    query === "hi" ||
+    query === "hello" ||
+    query === "hey" ||
+    query === "hey there" ||
+    query === "good morning" ||
+    query === "good evening" ||
+    query === "good afternoon" ||
+    query === "good night" ||
+    query === "sup"
+  ) {
+    const time = getIndianTimeInfo();
+    const greetingResponse = `${time.greeting}\n\nI'm Pitamber's AI companion. You can ask me about my engineering work (like **[NewsFlow](https://newsflow.space)**, **[TEMS](https://tems2.vercel.app/)**, or **[JamFlow](https://jamflow.world)**), my tech stack, grab my **[Resume](/media/resume.pdf)**, or even type \`/debug\` to enter developer terminal mode. What's on your mind?`;
+    await streamPredefinedText(greetingResponse, onChunk, signal);
+    return;
+  }
+
+  // 4. FAST-PATH: Instant Predefined FAQs
   const faqMatch = PREDEFINED_FAQS.find((faq) => faq.matches(query));
-  if (faqMatch) {
+  if (faqMatch && !options?.isDebug) {
     await streamPredefinedText(faqMatch.response, onChunk, signal);
     return;
   }
 
-  // 2. Try serverless proxy if configured
+  // Dynamic system prompt incorporating time, intent, and debug mode
+  const effectiveSystemPrompt = buildSystemPrompt(options);
+
+  // 5. Try serverless proxy if configured
   const proxyUrl = process.env.NEXT_PUBLIC_CHAT_PROXY_URL;
   if (proxyUrl) {
     try {
-      await streamFromProxy(proxyUrl, messages, onChunk, signal);
+      await streamFromProxy(proxyUrl, messages, effectiveSystemPrompt, onChunk, signal);
       return;
     } catch (err) {
       if ((err as Error).name === "AbortError") throw err;
@@ -499,7 +955,7 @@ export async function streamChatResponse(
     }
   }
 
-  // 3. Multi-Model & Multi-Key Fallback Pool: Seamlessly rotate models & keys
+  // 6. Multi-Model & Multi-Key Fallback Pool: Seamlessly rotate models & keys
   const geminiKeys = getAvailableGeminiKeys();
   if (geminiKeys.length > 0) {
     for (const model of CANDIDATE_MODELS) {
@@ -508,8 +964,14 @@ export async function streamChatResponse(
         const keyToUse = geminiKeys[keyIdx];
 
         try {
-          await streamFromGeminiDirect(keyToUse, model, messages, onChunk, signal);
-          // Succeeded! Keep this key as the active key
+          await streamFromGeminiDirect(
+            keyToUse,
+            model,
+            messages,
+            effectiveSystemPrompt,
+            onChunk,
+            signal
+          );
           activeKeyIndex = keyIdx;
           return;
         } catch (err: unknown) {
@@ -518,14 +980,13 @@ export async function streamChatResponse(
             `Gemini [${model}] with Key #${keyIdx + 1} exhausted or failed. Trying next option...`,
             (err as Error).message
           );
-          // Switch key pointer
           activeKeyIndex = (keyIdx + 1) % geminiKeys.length;
         }
       }
     }
   }
 
-  // 4. Fallback: If all remote calls fail, provide intelligent conversational reply
+  // 7. Fallback: If all remote calls fail, provide intelligent conversational reply
   const fallbackMatch = PREDEFINED_FAQS.find((faq) => faq.matches(query));
   const fallbackText = fallbackMatch
     ? fallbackMatch.response
