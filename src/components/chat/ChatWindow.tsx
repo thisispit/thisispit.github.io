@@ -129,11 +129,15 @@ export default function ChatWindow({
               )}
             </div>
 
-            {/* Time-Aware Subtitle */}
+            {/* Subtle, Natural Time & Online Subtitle */}
             <div className="flex items-center gap-1.5 text-[10px] text-foreground/50">
               <span className="inline-flex items-center gap-1">
-                {isNight ? <Moon size={10} className="text-indigo-400" /> : <Sun size={10} className="text-amber-500" />}
-                <span>{timeInfo.timeString} IST</span>
+                {isNight ? (
+                  <Moon size={10} className="text-indigo-400" />
+                ) : (
+                  <Sun size={10} className="text-amber-500" />
+                )}
+                <span>{timeInfo.timeString ? `${timeInfo.timeString} IST` : "Greater Noida"}</span>
               </span>
               <span className="text-foreground/30">•</span>
               <span
@@ -146,7 +150,13 @@ export default function ChatWindow({
                 }`}
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />
-                {isLoading ? "Typing..." : isDebugMode ? "Terminal" : "Online"}
+                {isLoading
+                  ? "Typing..."
+                  : isDebugMode
+                  ? "Terminal"
+                  : isNight
+                  ? "Night owl"
+                  : "Online"}
               </span>
             </div>
           </div>
@@ -204,31 +214,18 @@ export default function ChatWindow({
               : "bg-white/70 border-foreground/5 text-foreground font-inter"
           }`}
         >
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-1.5 font-poppins font-bold text-xs uppercase tracking-wider">
-              {isDebugMode ? (
-                <>
-                  <Terminal size={13} className="text-emerald-400" />
-                  <span className="text-emerald-400 font-mono text-xs">PITAMBER OS v2.1</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles size={14} className="text-foreground/70" />
-                  <span>Hey there! 👋</span>
-                </>
-              )}
-            </div>
-
-            {/* Time-Aware Micro-Status */}
-            <span
-              className={`text-[10px] px-2 py-0.5 rounded-full border ${
-                isDebugMode
-                  ? "bg-emerald-950/30 text-emerald-300 border-emerald-500/30"
-                  : "bg-foreground/5 text-foreground/60 border-foreground/10"
-              }`}
-            >
-              {timeInfo.statusText}
-            </span>
+          <div className="flex items-center gap-1.5 font-poppins font-bold text-xs uppercase tracking-wider mb-2">
+            {isDebugMode ? (
+              <>
+                <Terminal size={13} className="text-emerald-400" />
+                <span className="text-emerald-400 font-mono text-xs">PITAMBER OS v2.1</span>
+              </>
+            ) : (
+              <>
+                <Sparkles size={14} className="text-foreground/70" />
+                <span>Hey there! 👋</span>
+              </>
+            )}
           </div>
 
           <p className="text-xs text-foreground/75 leading-relaxed">

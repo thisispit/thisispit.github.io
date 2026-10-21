@@ -8,7 +8,6 @@ import {
   ChatMessage,
   streamChatResponse,
   detectVisitorIntent,
-  evaluateChaiMeter,
   VisitorIntent,
 } from "@/lib/chatService";
 
@@ -133,9 +132,6 @@ export default function ChatBot() {
       setVisitorIntent(detectedIntent);
     }
 
-    // Evaluate Chai Meter
-    const chaiMeter = evaluateChaiMeter(trimmed, detectedIntent, activeDebug);
-
     const userMessage: ChatMessage = {
       id: `user-${Date.now()}`,
       role: "user",
@@ -150,7 +146,6 @@ export default function ChatBot() {
       role: "assistant",
       content: "",
       timestamp: Date.now(),
-      chaiMeter,
       isDebug: activeDebug,
       intent: detectedIntent,
     };

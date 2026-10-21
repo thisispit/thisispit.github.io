@@ -6,15 +6,9 @@ export interface IndianTimeInfo {
   timeString: string;
   hour: number;
   period: "late-night" | "morning" | "afternoon" | "evening";
-  statusText: string;
-  greeting: string;
-}
-
-export interface ChaiEvaluation {
-  score: number; // 1 to 5
-  cups: string;
-  label: string;
-  note: string;
+  vibe: string;
+  casualGreeting: string;
+  timeAnswer: string;
 }
 
 export interface ChatMessage {
@@ -22,13 +16,13 @@ export interface ChatMessage {
   role: "user" | "assistant" | "system";
   content: string;
   timestamp?: number;
-  chaiMeter?: ChaiEvaluation;
   isDebug?: boolean;
   intent?: VisitorIntent;
 }
 
 /**
- * Calculates current real-time status in Indian Standard Time (IST, UTC+5:30).
+ * Calculates current real-time status in Indian Standard Time (IST, UTC+5:30)
+ * formatted for natural, conversational human replies.
  */
 export function getIndianTimeInfo(): IndianTimeInfo {
   try {
@@ -48,36 +42,51 @@ export function getIndianTimeInfo(): IndianTimeInfo {
     });
     const hour = parseInt(istHourFormatter.format(now), 10);
 
-    let period: IndianTimeInfo["period"] = "afternoon";
-    let statusText = "Greater Noida, IN • Online";
-    let greeting = `Hey! It's ${timeString} IST in Greater Noida.`;
-
     if (hour >= 23 || hour < 5) {
-      period = "late-night";
-      statusText = `Greater Noida • ${timeString} IST • Late night coding 🌙`;
-      greeting = `Hey! It's late night (${timeString} IST) here in Greater Noida. I'm usually up debugging, tuning models, or sipping midnight chai!`;
+      return {
+        timeString,
+        hour,
+        period: "late-night",
+        vibe: hour >= 0 && hour < 4 ? "past midnight" : "late night",
+        casualGreeting: "It's past midnight here, but I'm still up coding.",
+        timeAnswer: `It's pretty late over here—just past midnight (${timeString} IST in Greater Noida). Definitely in night owl mode!`,
+      };
     } else if (hour >= 5 && hour < 12) {
-      period = "morning";
-      statusText = `Greater Noida • ${timeString} IST • Morning chai ☕`;
-      greeting = `Good morning! It's ${timeString} IST in Greater Noida. Starting the day with fresh chai and deep focus.`;
+      return {
+        timeString,
+        hour,
+        period: "morning",
+        vibe: "morning",
+        casualGreeting: "Morning! Just starting the day over here with a warm cup of chai.",
+        timeAnswer: `It's morning over here in Greater Noida (${timeString} IST). Starting the day fresh!`,
+      };
     } else if (hour >= 12 && hour < 17) {
-      period = "afternoon";
-      statusText = `Greater Noida • ${timeString} IST • Building systems ⚡`;
-      greeting = `Good afternoon! It's ${timeString} IST in Greater Noida. In the zone building and engineering systems.`;
+      return {
+        timeString,
+        hour,
+        period: "afternoon",
+        vibe: "afternoon",
+        casualGreeting: "Afternoon! Hope your day is going well—deep in build mode today.",
+        timeAnswer: `It's afternoon on my end here in Greater Noida (${timeString} IST).`,
+      };
     } else {
-      period = "evening";
-      statusText = `Greater Noida • ${timeString} IST • Chai & Conversations ☕`;
-      greeting = `Good evening! It's ${timeString} IST in Greater Noida—prime time for warm chai and thoughtful tech discussions.`;
+      return {
+        timeString,
+        hour,
+        period: "evening",
+        vibe: "evening",
+        casualGreeting: "Good evening! Winding down and catching up on projects.",
+        timeAnswer: `It's evening over here in Greater Noida (${timeString} IST)—usually prime time for reading and tinkering with code.`,
+      };
     }
-
-    return { timeString, hour, period, statusText, greeting };
   } catch {
     return {
-      timeString: "IST",
+      timeString: "",
       hour: 14,
       period: "afternoon",
-      statusText: "Greater Noida, IN • Online",
-      greeting: "Hey there! Glad you stopped by.",
+      vibe: "afternoon",
+      casualGreeting: "Hey there! Glad you stopped by.",
+      timeAnswer: "I'm based in Greater Noida, India.",
     };
   }
 }
@@ -173,113 +182,6 @@ export function detectVisitorIntent(
 }
 
 /**
- * Chai Meter: rates each interaction on a 1-5 ☕ scale reflecting
- * depth, technical complexity, and conversational resonance.
- */
-export function evaluateChaiMeter(
-  query: string,
-  intent: VisitorIntent = "curious",
-  isDebug?: boolean
-): ChaiEvaluation {
-  if (isDebug) {
-    return {
-      score: 5,
-      cups: "☕☕☕☕☕",
-      label: "Kernel Chai",
-      note: "Terminal diagnostic execution",
-    };
-  }
-
-  const q = query.toLowerCase();
-
-  // 5 Cups: Deep architecture, system design, high concurrency
-  if (
-    q.includes("hurdle") ||
-    q.includes("concurrency") ||
-    q.includes("deduplication") ||
-    q.includes("stream") ||
-    q.includes("pipeline") ||
-    q.includes("architecture") ||
-    q.includes("layer") ||
-    q.includes("ocr") ||
-    q.includes("ollama") ||
-    q.includes("spring data jpa")
-  ) {
-    return {
-      score: 5,
-      cups: "☕☕☕☕☕",
-      label: "Karak Chai Masterclass",
-      note: "Maximum technical depth & systems design",
-    };
-  }
-
-  // 4 Cups: Specific projects & frameworks
-  if (
-    q.includes("newsflow") ||
-    q.includes("tems") ||
-    q.includes("mindtiles") ||
-    q.includes("jamflow") ||
-    q.includes("spendsense") ||
-    q.includes("fastapi") ||
-    q.includes("java") ||
-    q.includes("spring") ||
-    q.includes("react") ||
-    intent === "engineer"
-  ) {
-    return {
-      score: 4,
-      cups: "☕☕☕☕",
-      label: "Deep Tech Discussion",
-      note: "Solid engineering enquiry",
-    };
-  }
-
-  // 3 Cups: Skills, experience, projects overview, recruitment
-  if (
-    q.includes("project") ||
-    q.includes("tech stack") ||
-    q.includes("skills") ||
-    q.includes("experience") ||
-    intent === "recruiter" ||
-    intent === "collaborator"
-  ) {
-    return {
-      score: 3,
-      cups: "☕☕☕",
-      label: "Thoughtful Conversation",
-      note: "Portfolio & technical depth",
-    };
-  }
-
-  // 2 Cups: Resume, contact, education
-  if (
-    q.includes("resume") ||
-    q.includes("cv") ||
-    q.includes("contact") ||
-    q.includes("email") ||
-    q.includes("college") ||
-    q.includes("niet") ||
-    q.includes("about") ||
-    q.includes("who are you")
-  ) {
-    return {
-      score: 2,
-      cups: "☕☕",
-      label: "Fresh Brew",
-      note: "Getting to know Pitamber",
-    };
-  }
-
-  // 1 Cup: Casual greeting
-  return {
-    score: 1,
-    cups: "☕",
-    label: "Quick Sip",
-    note: "Casual greeting & chat",
-  };
-}
-
-/**
  * Generates terminal telemetry responses for Debug Mode.
  */
 export function generateDebugResponse(rawCommand: string): string {
@@ -352,7 +254,7 @@ TOTAL: 8 DEPLOYMENTS | STATUS: ACTIVE & HEALTHY
   }
 
   if (cmd === "/exit" || cmd === "exit" || cmd === ":q" || cmd === "quit") {
-    return `Exited debug mode. Back to normal conversation! Feel free to ask anything about my work, journey, or chai philosophy.`;
+    return `Exited debug mode. Back to normal conversation! Feel free to ask anything about my work, journey, or background.`;
   }
 
   return `\`\`\`bash
@@ -370,10 +272,14 @@ export function buildSystemPrompt(options?: { isDebug?: boolean; intent?: Visito
   const isDebug = options?.isDebug || false;
 
   let dynamicAdditions = `
-CURRENT REAL-TIME CONTEXT:
-- Real local time at Pitamber's location: ${timeInfo.timeString} IST (Greater Noida, Uttar Pradesh, India).
-- Current period: ${timeInfo.period} (${timeInfo.statusText}).
-- If greeted or asked about current time/location, acknowledge the time naturally in first-person (${timeInfo.greeting}).
+REAL-TIME CONTEXT:
+- You are Pitamber Singh, chatting directly with a visitor on your portfolio.
+- Location & Local Time: You're based in Greater Noida, India. It's currently ${timeInfo.vibe} (${timeInfo.timeString} IST) on your end.
+- CRITICAL NATURAL TONE RULE:
+  * Speak like a real human developer texting on LinkedIn or chatting over chai.
+  * NEVER give robotic clock dumps like "Right now it is 10:15 PM IST in Greater Noida, Uttar Pradesh, India".
+  * If greeted, acknowledge the time casually like "${timeInfo.casualGreeting}".
+  * Only bring up time or your location if asked or if it naturally adds warm human flavor.
 - Detected visitor intent: ${intent.toUpperCase()}.
 `;
 
@@ -638,7 +544,7 @@ It details my B.Tech Data Science background (CGPA: 8.20), Java & Python project
 
 Originally from Bihar, I love building practical software that solves everyday problems—from high-performance RSS readers (**NewsFlow**) and enterprise transport management (**[TEMS](https://tems2.vercel.app/)** in Java 21/Spring Boot) to AI financial document parsers (**SpendSenseAI**) and music platforms (**[JamFlow](https://jamflow.world)**).
 
-My core philosophy is **"Simplicity isn't the absence of depth—it's the removal of unnecessary complexity."** Outside coding, I cherish deep conversations over a warm cup of chai (*'Chai & Conversations'*), music, and continuous learning.
+My core philosophy is **"Simplicity isn't the absence of depth—it's the removal of unnecessary complexity."** Outside coding, I cherish deep conversations over a warm cup of chai, music, and continuous learning.
 
 Feel free to ask about any of my **projects** or grab my **[Resume](/media/resume.pdf)**!`,
   },
@@ -866,7 +772,7 @@ async function streamPredefinedText(
 /**
  * Master chat streamer:
  * 1. Checks for Debug commands (/debug, /sysinfo, /stack, /projects, /exit)
- * 2. Checks for real-time / time-aware queries (time, greetings, location)
+ * 2. Checks for real-time / time-aware queries with natural conversational answers
  * 3. Checks for instant pre-warmed FAQ matches
  * 4. Calls Serverless Proxy / Gemini with dynamic time & intent-aware system prompt
  * 5. Falls back to offline persona response if network drops
@@ -899,7 +805,7 @@ export async function streamChatResponse(
     return;
   }
 
-  // 2. FAST-PATH: Time-aware queries
+  // 2. FAST-PATH: Time-aware queries (natural, human response)
   if (
     query === "what time is it" ||
     query.includes("what time is it") ||
@@ -910,12 +816,12 @@ export async function streamChatResponse(
     query === "where are you"
   ) {
     const time = getIndianTimeInfo();
-    const timeResponse = `Right now, it's **${time.timeString} IST** here in Greater Noida, India (${time.statusText}).\n\n${time.greeting}\n\nWhat would you like to explore about my projects or background?`;
+    const timeResponse = `${time.timeAnswer}\n\nWhat are you curious to check out—projects, tech stack, or something else?`;
     await streamPredefinedText(timeResponse, onChunk, signal);
     return;
   }
 
-  // 3. FAST-PATH: Time-aware greetings
+  // 3. FAST-PATH: Time-aware greetings (natural, relaxed phrasing)
   if (
     query === "hi" ||
     query === "hello" ||
@@ -928,7 +834,7 @@ export async function streamChatResponse(
     query === "sup"
   ) {
     const time = getIndianTimeInfo();
-    const greetingResponse = `${time.greeting}\n\nI'm Pitamber's AI companion. You can ask me about my engineering work (like **[NewsFlow](https://newsflow.space)**, **[TEMS](https://tems2.vercel.app/)**, or **[JamFlow](https://jamflow.world)**), my tech stack, grab my **[Resume](/media/resume.pdf)**, or even type \`/debug\` to enter developer terminal mode. What's on your mind?`;
+    const greetingResponse = `${time.casualGreeting} Glad you dropped by!\n\nI'm Pitamber's AI companion. You can ask me about my engineering work (like **[NewsFlow](https://newsflow.space)**, **[TEMS](https://tems2.vercel.app/)**, or **[JamFlow](https://jamflow.world)**), my tech stack, grab my **[Resume](/media/resume.pdf)**, or type \`/debug\` to enter developer terminal mode. What's on your mind?`;
     await streamPredefinedText(greetingResponse, onChunk, signal);
     return;
   }

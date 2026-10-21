@@ -179,36 +179,6 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
             </div>
           )}
         </div>
-
-        {/* Chai Meter: subtle, playful personality rating on assistant messages */}
-        {!isUser && message.chaiMeter && (!isStreaming || message.content.trim().length > 30) && (
-          <div
-            className={`mt-2.5 pt-2 flex items-center justify-between text-[11px] select-none ${
-              isDebug
-                ? "border-t border-white/10 text-slate-400 font-mono text-[10px]"
-                : "border-t border-foreground/5 text-foreground/50 font-inter"
-            }`}
-          >
-            <div className="flex items-center gap-1.5">
-              <span className="tracking-widest">{message.chaiMeter.cups}</span>
-              <span
-                className={`font-medium ${
-                  isDebug ? "text-emerald-400" : "text-foreground/75"
-                }`}
-              >
-                {message.chaiMeter.label}
-              </span>
-            </div>
-            <span
-              className={`text-[10px] ${
-                isDebug ? "text-slate-500" : "text-foreground/40"
-              }`}
-              title={message.chaiMeter.note}
-            >
-              Chai Meter: {message.chaiMeter.score}/5
-            </span>
-          </div>
-        )}
       </div>
 
       {/* User Avatar */}

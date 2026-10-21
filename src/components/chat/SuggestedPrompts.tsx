@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FolderGit2, Zap, Cpu, Sparkles, FileText, Mail, HelpCircle, Terminal, Coffee } from "lucide-react";
+import { FolderGit2, Zap, Cpu, Sparkles, FileText, Mail, HelpCircle, Terminal } from "lucide-react";
 import { SUGGESTED_QUESTIONS } from "@/data/portfolioKnowledge";
 
 interface SuggestedPromptsProps {
@@ -14,9 +14,6 @@ function getPromptIcon(prompt: string) {
   const lower = prompt.toLowerCase();
   if (lower.includes("debug") || lower.startsWith("/")) {
     return Terminal;
-  }
-  if (lower.includes("chai")) {
-    return Coffee;
   }
   if (lower.includes("top projects") || lower.includes("projects")) {
     return FolderGit2;
