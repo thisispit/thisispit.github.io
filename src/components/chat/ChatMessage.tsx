@@ -82,7 +82,9 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
       <div
         className={`relative text-sm shadow-soft overflow-hidden ${
           isUser
-            ? "max-w-[90%] sm:max-w-[88%] bg-foreground text-background rounded-2xl rounded-tr-xs px-4 py-3 font-inter leading-relaxed"
+            ? isDebug
+              ? "max-w-[95%] sm:max-w-[92%] bg-[#0d1117] text-emerald-300 border border-emerald-500/20 rounded-2xl rounded-tr-xs px-4 py-2.5 font-mono text-xs"
+              : "max-w-[90%] sm:max-w-[88%] bg-foreground text-background rounded-2xl rounded-tr-xs px-4 py-3 font-inter leading-relaxed"
             : isDebug
             ? "max-w-[95%] sm:max-w-[92%] bg-[#0d1117] text-slate-200 border border-emerald-500/30 rounded-2xl rounded-tl-xs px-4 py-3 font-mono text-xs"
             : isStreaming && !message.content.trim()
@@ -128,7 +130,14 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
 
         <div className="break-words">
           {isUser ? (
-            <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
+            isDebug ? (
+              <p className="leading-relaxed font-mono text-xs">
+                <span className="text-emerald-400 select-none mr-1.5">$</span>
+                <span className="whitespace-pre-wrap">{message.content}</span>
+              </p>
+            ) : (
+              <p className="leading-relaxed whitespace-pre-wrap">{message.content}</p>
+            )
           ) : (
             <div>
               {/* While waiting for words to start, show 3-dot typing wave */}
@@ -165,7 +174,7 @@ export default function ChatMessage({ message, isStreaming }: ChatMessageProps) 
                   <div
                     className={`${
                       isDebug
-                        ? "[&>p]:my-1.5 [&>pre]:bg-black/60 [&>pre]:text-emerald-300 [&>pre]:p-2.5 [&>pre]:rounded-lg [&>pre]:border [&>pre]:border-emerald-500/20 [&>code]:bg-white/10 [&>code]:text-emerald-300 [&>code]:px-1 [&>code]:py-0.5 [&>code]:rounded"
+                        ? "[&>p]:my-1.5 [&>pre]:bg-black/60 [&>pre]:text-emerald-300 [&>pre]:p-2 sm:[&>pre]:p-2.5 [&>pre]:rounded-lg [&>pre]:border [&>pre]:border-emerald-500/20 [&>pre]:overflow-x-auto [&>pre]:text-[10px] sm:[&>pre]:text-xs [&>pre]:leading-relaxed [&>code]:bg-white/10 [&>code]:text-emerald-300 [&>code]:px-1 [&>code]:py-0.5 [&>code]:rounded"
                         : "[&>p]:my-2 [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&>ul]:my-2 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:space-y-1 [&>ol]:my-2 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:space-y-1 [&>li]:my-0.5 [&>code]:bg-black/5 [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded [&>code]:text-xs [&>code]:font-mono [&>pre]:bg-neutral-900 [&>pre]:text-neutral-100 [&>pre]:p-3 [&>pre]:rounded-xl [&>pre]:my-2 [&>pre]:overflow-x-auto [&>pre]:text-xs [&>pre]:font-mono"
                     } ${
                       isStreaming

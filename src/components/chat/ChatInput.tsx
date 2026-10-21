@@ -14,7 +14,7 @@ export default function ChatInput({
   onSendMessage,
   onStopStreaming,
   isLoading,
-  placeholder = "Ask anything about Pitamber's projects or skills...",
+  placeholder = "Ask me anything...",
 }: ChatInputProps) {
   const [input, setInput] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -53,7 +53,7 @@ export default function ChatInput({
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         disabled={isLoading}
-        className="flex-1 bg-secondary-background/80 hover:bg-secondary-background focus:bg-white text-foreground text-sm rounded-full px-4 py-2.5 outline-none border border-foreground/10 focus:border-foreground/30 transition-all placeholder:text-foreground/40 disabled:opacity-60"
+        className="flex-1 bg-secondary-background/80 hover:bg-secondary-background focus:bg-white text-foreground text-sm rounded-full px-4 py-2.5 outline-none border border-foreground/10 focus:border-foreground/30 transition-all placeholder:text-foreground/40 placeholder:text-xs placeholder:truncate disabled:opacity-60"
       />
 
       {isLoading && onStopStreaming ? (

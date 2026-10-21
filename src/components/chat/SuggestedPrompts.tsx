@@ -40,6 +40,10 @@ const DEBUG_COMMANDS = [
   "/sysinfo",
   "/stack",
   "/projects",
+  "/ping",
+  "/whoami",
+  "/logs",
+  "/cert",
   "/exit",
 ];
 
@@ -54,16 +58,17 @@ export default function SuggestedPrompts({
         <p className="text-[10px] font-mono uppercase tracking-wider text-emerald-400/80 mb-2 px-1">
           Telemetry Commands:
         </p>
-        <div className="flex flex-wrap gap-1.5">
+        {/* Horizontally scrollable on mobile, wraps naturally on wider screens */}
+        <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar sm:flex-wrap sm:overflow-x-visible">
           {DEBUG_COMMANDS.map((cmd) => (
             <button
               key={cmd}
               type="button"
               disabled={disabled}
               onClick={() => onSelectPrompt(cmd)}
-              className="inline-flex items-center gap-1.5 text-xs font-mono bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-300 px-3 py-1.5 rounded-lg border border-emerald-500/30 shadow-xs transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-1 shrink-0 text-[11px] font-mono bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-300 px-2.5 py-1.5 rounded-lg border border-emerald-500/30 shadow-xs transition-all duration-200 active:scale-95 disabled:opacity-50 cursor-pointer"
             >
-              <Terminal size={11} className="text-emerald-400" />
+              <Terminal size={10} className="text-emerald-400" />
               <span>{cmd}</span>
             </button>
           ))}

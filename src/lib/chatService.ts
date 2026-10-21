@@ -195,12 +195,42 @@ TIME: ${getIndianTimeInfo().timeString} IST | LOCATION: Greater Noida, UP, IN
 STATUS: 200 OK | UPTIME: 99.98% | REPO: github.com/thisispit
 
 AVAILABLE DIAGNOSTIC COMMANDS:
+  /help      - Display this help manifest
   /sysinfo   - Runtime specs, education & node health
   /stack     - Languages, enterprise backends & AI toolchains
   /projects  - Microservice repos, live endpoints & status
+  /ping      - Round-trip latency check & availability status
+  /whoami    - Identity & auth context of current operator node
+  /logs      - Recent activity log & commit stream
+  /cert      - Certification registry & accreditations
   /exit      - Terminate debug session & return to warm persona
 
-HINT: Normal questions in debug mode stream telemetry headers!
+HINT: Any free-form question also works in debug mode!
+\`\`\``;
+  }
+
+  if (cmd === "/help" || cmd === "help" || cmd === "--help" || cmd === "-h") {
+    return `\`\`\`bash
+[MANUAL: pitamber-core-v2.1]
+USAGE: /<command> [args]
+
+COMMANDS:
+  /help      Print this help message
+  /sysinfo   Node specs — operator profile, CGPA, certifications
+  /stack     Full dependency matrix: languages, tools, frameworks
+  /projects  Running containers — live links & repo manifests
+  /ping      Availability probe & response-time benchmark
+  /whoami    Current operator identity & access context
+  /logs      Recent commit activity & milestones
+  /cert      Certification registry & cloud accreditations
+  /exit      Exit debug session, restore conversational mode
+
+NATURAL LANGUAGE:
+  Any sentence works — the AI responds in structured telemetry style.
+
+KEYBINDINGS (conceptual):
+  Ctrl+C   Abort current stream
+  :q       Alias for /exit (vim users, you're welcome)
 \`\`\``;
   }
 
@@ -215,6 +245,8 @@ PRIMARY CORES : Java 21 LTS | Python 3.12 | TypeScript 5.5
 CERTIFICATIONS: NCET+ SDE (Java) [2026] | AWS Cloud Architecting [2026]
 MEMORY HEAP   : Optimal | Thread Safety: Guaranteed
 COMMUNICATION : pitambersiingh@gmail.com | linkedin.com/in/singhpitamber
+GITHUB        : github.com/thisispit
+LINKEDIN      : linkedin.com/in/singhpitamber
 ==================================================
 STATUS: ALL SYSTEMS NOMINAL
 \`\`\``;
@@ -232,6 +264,8 @@ DATABASE CLUSTER     : PostgreSQL (Supabase), SQLite 3, MySQL
 ENVIRONMENT          : Linux / Unix, Git, IntelliJ IDEA, VS Code
 ----------------------------------------------------------------------
 EXECUTION SPEED: Sub-200ms edge response latency verified
+PACKAGE MANAGER: npm / pip / Maven
+BUILD TOOLS    : Gradle, Webpack, Vite
 \`\`\``;
   }
 
@@ -253,13 +287,94 @@ TOTAL: 8 DEPLOYMENTS | STATUS: ACTIVE & HEALTHY
 \`\`\``;
   }
 
+  if (cmd === "/ping" || cmd === "ping") {
+    const ms = Math.floor(Math.random() * 18) + 3; // 3–20 ms
+    return `\`\`\`bash
+[PING] pitamber-core-v2.1 — availability probe
+----------------------------------------------------------------------
+RESPONSE TIME  : ${ms}ms (sub-20ms target ✓)
+ENDPOINT HEALTH: newsflow.space        → 200 OK
+                 tems2.vercel.app      → 200 OK
+                 jamflow.world         → 200 OK
+                 mindtiles.vercel.app  → 200 OK
+                 drizzzlerain.web.app  → 200 OK
+----------------------------------------------------------------------
+OPERATOR STATUS : AVAILABLE | Open to new opportunities
+EMAIL PING      : pitambersiingh@gmail.com (avg reply < 24h)
+\`\`\``;
+  }
+
+  if (cmd === "/whoami" || cmd === "whoami") {
+    return `\`\`\`bash
+[IDENTITY / AUTH CONTEXT]
+----------------------------------------------------------------------
+uid=1000(visitor) gid=1000(guest) groups=1000(guest)
+
+Node operator context:
+  OPERATOR    : Pitamber Kumar Singh
+  HANDLE      : thisispit
+  INSTITUTION : NIET Greater Noida | B.Tech Data Science (2023-2027)
+  LOCATION    : Greater Noida, UP, IN (UTC+5:30)
+  ORIGIN      : Bihar, India
+
+Access level:
+  portfolio   [READ]  — all projects, resume, links
+  codebase    [READ]  — public GitHub repos
+  contact     [WRITE] — pitambersiingh@gmail.com
+----------------------------------------------------------------------
+You are authenticated as an anonymous visitor.
+\`\`\``;
+  }
+
+  if (cmd === "/logs" || cmd === "logs" || cmd === "log") {
+    return `\`\`\`bash
+[ACTIVITY LOG — recent commits & milestones]
+----------------------------------------------------------------------
+2026-10   AWS Academy Cloud Architecting — GRADUATED
+2026-08   NCET+ SDE (Java) Certification — PASSED
+2026-07   NewsFlow v2.0 — deduplication pipeline shipped
+2026-06   SpendSenseAI — 95%+ OCR extraction accuracy hit
+2026-05   TEMS — Spring Boot layered arch refactor complete
+2026-04   JamFlow — seamless audio playback engine rebuilt
+2026-03   MindTiles — 60fps spring-physics card flip landed
+2026-02   Screeeny — Chrome MV3 extension published
+----------------------------------------------------------------------
+HEAD → main | All systems green
+\`\`\``;
+  }
+
+  if (cmd === "/cert" || cmd === "cert" || cmd === "certs" || cmd === "/certs") {
+    return `\`\`\`bash
+[CERTIFICATION REGISTRY]
+----------------------------------------------------------------------
+ID   CREDENTIAL                        ISSUER              YEAR
+----------------------------------------------------------------------
+C01  NCET+ Software Dev Engineer (Java) NCET               2026
+C02  AWS Academy Cloud Architecting     Amazon Web Services 2026
+----------------------------------------------------------------------
+STATUS: ACTIVE & VALID
+NEXT TARGET: Google Cloud Professional Data Engineer
+\`\`\``;
+  }
+
   if (cmd === "/exit" || cmd === "exit" || cmd === ":q" || cmd === "quit") {
     return `Exited debug mode. Back to normal conversation! Feel free to ask anything about my work, journey, or background.`;
   }
 
+  // Unknown command — provide a useful error like a real shell
+  if (cmd.startsWith("/")) {
+    return `\`\`\`bash
+[ERROR] Command not recognized: ${rawCommand}
+[HINT ] Try /help to list all available commands.
+----------------------------------------------------------------------
+Did you mean one of:
+  /sysinfo  /stack  /projects  /ping  /whoami  /logs  /cert  /exit
+\`\`\``;
+  }
+
   return `\`\`\`bash
 [TELEMETRY] Query: "${rawCommand}"
-[STATUS: 200 OK] Executing through Data Engineering stack...
+[STATUS: 200 OK] Routing to AI engine with debug context...
 \`\`\``;
 }
 
@@ -788,18 +903,19 @@ export async function streamChatResponse(
   const query = rawQuery.toLowerCase();
 
   // 1. FAST-PATH: Debug commands
-  if (
-    query === "/debug" ||
-    query === "debug" ||
-    query === "/sysinfo" ||
-    query === "sysinfo" ||
-    query === "/stack" ||
-    query === "stack" ||
-    query === "/projects" ||
-    query === "projects" ||
-    query === "/exit" ||
-    query === "exit"
-  ) {
+  const DEBUG_COMMANDS = new Set([
+    "/debug", "debug", "--debug",
+    "/help", "help", "--help", "-h",
+    "/sysinfo", "sysinfo", "specs",
+    "/stack", "stack", "tools",
+    "/projects", "projects", "ps",
+    "/ping", "ping",
+    "/whoami", "whoami",
+    "/logs", "logs", "log",
+    "/cert", "cert", "certs", "/certs",
+    "/exit", "exit", ":q", "quit",
+  ]);
+  if (DEBUG_COMMANDS.has(query)) {
     const debugText = generateDebugResponse(query);
     await streamPredefinedText(debugText, onChunk, signal);
     return;

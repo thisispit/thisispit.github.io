@@ -75,14 +75,10 @@ export default function ChatBot() {
   };
 
   const handleToggleDebug = () => {
-    setIsDebugMode((prev) => {
-      const next = !prev;
-      if (next && messages.length === 0) {
-        // Send /debug command immediately if chat is empty
-        handleSendMessage("/debug");
-      }
-      return next;
-    });
+    const next = !isDebugMode;
+    setIsDebugMode(next);
+    // Always acknowledge the mode change in the chat thread
+    handleSendMessage(next ? "/debug" : "/exit");
   };
 
   const handleClearHistory = () => {

@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { X, RotateCcw, Sparkles, Terminal, Moon, Sun, Briefcase, Code, Handshake } from "lucide-react";
+import { X, RotateCcw, Sparkles, Terminal, Briefcase, Code, Handshake } from "lucide-react";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
 import SuggestedPrompts from "./SuggestedPrompts";
@@ -129,17 +129,8 @@ export default function ChatWindow({
               )}
             </div>
 
-            {/* Subtle, Natural Time & Online Subtitle */}
+            {/* Online Status */}
             <div className="flex items-center gap-1.5 text-[10px] text-foreground/50">
-              <span className="inline-flex items-center gap-1">
-                {isNight ? (
-                  <Moon size={10} className="text-indigo-400" />
-                ) : (
-                  <Sun size={10} className="text-amber-500" />
-                )}
-                <span>{timeInfo.timeString ? `${timeInfo.timeString} IST` : "Greater Noida"}</span>
-              </span>
-              <span className="text-foreground/30">•</span>
               <span
                 className={`inline-flex items-center gap-1 font-medium ${
                   isLoading
@@ -153,7 +144,7 @@ export default function ChatWindow({
                 {isLoading
                   ? "Typing..."
                   : isDebugMode
-                  ? "Terminal"
+                  ? "Terminal active"
                   : isNight
                   ? "Night owl"
                   : "Online"}
@@ -204,11 +195,11 @@ export default function ChatWindow({
       {/* 2. Messages Viewport */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-y-auto px-4 sm:px-5 py-4 space-y-2 no-scrollbar"
+        className="flex-1 overflow-y-auto px-3 sm:px-5 py-4 space-y-2 no-scrollbar"
       >
         {/* Welcome Greeting Banner */}
         <div
-          className={`p-4 rounded-2xl border mb-4 shadow-xs transition-colors ${
+          className={`p-3 sm:p-4 rounded-2xl border mb-4 shadow-xs transition-colors ${
             isDebugMode
               ? "bg-[#0f1622] border-emerald-500/20 text-slate-300 font-mono text-xs"
               : "bg-white/70 border-foreground/5 text-foreground font-inter"
@@ -229,9 +220,18 @@ export default function ChatWindow({
           </div>
 
           <p className="text-xs text-foreground/75 leading-relaxed">
-            {isDebugMode
-              ? "Developer terminal mode enabled. Query runtime telemetry, architecture specs, or type /exit to leave."
-              : "Glad you dropped by. I'm here to give you insight into Pit—his engineering background, projects, Java/Python stack, and journey."}
+            {isDebugMode ? (
+              <>
+                <span className="hidden sm:inline">
+                  Developer terminal mode active. Type /help for all commands, or ask anything — responses include telemetry headers.
+                </span>
+                <span className="sm:hidden">
+                  Terminal active. Type /help or pick a command below.
+                </span>
+              </>
+            ) : (
+              "Glad you dropped by. I'm here to give you insight into Pit—his engineering background, projects, Java/Python stack, and journey."
+            )}
           </p>
 
           <p className="text-xs text-foreground/75 leading-relaxed mt-1.5">
@@ -271,8 +271,8 @@ export default function ChatWindow({
         isLoading={isLoading}
         placeholder={
           isDebugMode
-            ? "Enter command (/sysinfo, /stack, /projects, /exit)..."
-            : "Ask anything about projects, stack, or type /debug..."
+            ? "Enter a command or query..."
+            : "Ask me anything..."
         }
       />
     </motion.div>
